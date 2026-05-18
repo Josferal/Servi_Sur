@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ServiMarket - Gestión de Usuarios</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f5fbf5",
+                        "on-surface-variant": "#3d4a42",
+                        "surface-variant": "#dee4de",
+                        "secondary-fixed-dim": "#c6c6c9",
+                        "outline-variant": "#bccac0",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#ba5551",
+                        "on-background": "#171d19",
+                        "on-surface": "#171d19",
+                        "on-secondary-fixed-variant": "#454749",
+                        "tertiary-fixed": "#ffdad7",
+                        "background": "#f5fbf5",
+                        "on-primary-fixed": "#002114",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2c322e",
+                        "surface-container-low": "#eff5ef",
+                        "inverse-primary": "#68dba9",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f5fbf5",
+                        "primary-container": "#00855d",
+                        "surface-container-high": "#e4eae4",
+                        "on-primary-fixed-variant": "#005137",
+                        "primary-fixed-dim": "#68dba9",
+                        "inverse-on-surface": "#ecf2ec",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#f5fff7",
+                        "outline": "#6d7a72",
+                        "tertiary": "#9b3e3b",
+                        "on-secondary-fixed": "#1a1c1e",
+                        "secondary-container": "#e2e2e5",
+                        "primary-fixed": "#85f8c4",
+                        "surface-container": "#e9efe9",
+                        "on-tertiary-fixed-variant": "#7f2928",
+                        "secondary": "#5d5e61",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e2e2e5",
+                        "tertiary-fixed-dim": "#ffb3ae",
+                        "on-tertiary-fixed": "#410004",
+                        "on-secondary-container": "#636467",
+                        "surface-dim": "#d5dcd6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#006948",
+                        "surface-container-highest": "#dee4de",
+                        "surface-tint": "#006c4a",
+                        "on-tertiary-container": "#fffbff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "sidebar-width": "260px",
+                        "unit": "8px",
+                        "card-gap": "24px",
+                        "container-padding": "32px"
+                    },
+                    "fontFamily": {
+                        "h1": ["Inter"],
+                        "h2": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "h3": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h2": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F7FA;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[260px] bg-on-background flex flex-col h-full py-6">
+<div class="px-6 mb-8">
+<h2 class="font-h2 text-h2 font-bold text-surface-lowest text-white">ServiMarket</h2>
+<p class="text-on-surface-variant font-label-sm text-label-sm opacity-70">Administración</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 hover:bg-on-secondary-fixed-variant group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Usuarios - ACTIVE -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-on-primary rounded-lg mx-2 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Usuarios</span>
+</a>
+<!-- Servicios -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 hover:bg-on-secondary-fixed-variant" href="#">
+<span class="material-symbols-outlined" data-icon="handyman">handyman</span>
+<span class="font-body-md text-body-md">Servicios</span>
+</a>
+<!-- Órdenes -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 hover:bg-on-secondary-fixed-variant" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-body-md text-body-md">Órdenes</span>
+</a>
+<!-- Reportes -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 hover:bg-on-secondary-fixed-variant" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Reportes</span>
+</a>
+<!-- Configuración -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 hover:bg-on-secondary-fixed-variant" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Configuración</span>
+</a>
+</nav>
+<div class="px-6 pt-6 border-t border-on-secondary-fixed-variant">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">A</div>
+<div class="overflow-hidden">
+<p class="text-white font-label-md text-label-md truncate">Admin Global</p>
+<p class="text-on-surface-variant text-[10px] opacity-60">admin@servimarket.com</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-16 bg-surface-bright flex justify-between items-center w-[calc(100%-260px)] px-8 border-b border-outline-variant z-10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-60" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 font-label-md text-label-md focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Buscar usuarios, IDs, correos..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="hover:bg-surface-container-high rounded-full p-2 transition-transform active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-surface-container-high rounded-full p-2 transition-transform active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<img alt="Avatar de administrador" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" data-alt="A professional headshot of a Hispanic male administrator in a clean office setting. He is wearing a professional charcoal blazer and a white shirt. The lighting is soft and natural, with a bright, minimalist modern background. The overall aesthetic is reliable and professional, consistent with a high-end corporate administrative platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYze26-GDSSJ2hNfzvghML-VIHDecNJqEUFzO9__J2uxvLLwd2V9zoFVCeWzdE0eiK80G5OdpGQREDNYvcdRjpmUUDHJIW37ma7HXDfHhjzUg_565Mly_kYy5pEEmx11_2d9ghQjiM038kJZ3IPJIqNJ68J84o55SkYHi-CUelqaRw77AgAViY0PbGp6-19_I8iGTig6FUknsdY2LNb4X8Y9Iccw5DzaeQI6JxwbSlTWH3cL4L46mVgeXuj3OmSrAGIzpTAYIuPJM"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[260px] pt-16 p-8 min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-center mb-8 mt-4">
+<div>
+<h1 class="font-h1 text-h1 text-on-background">Gestión de Usuarios</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Control centralizado de clientes, proveedores y staff.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg flex items-center gap-2 font-label-md text-label-md hover:brightness-90 transition-all shadow-sm active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Agregar Usuario
+            </button>
+</div>
+<!-- Filters Section -->
+<div class="bg-surface-container-lowest p-6 rounded-xl card-shadow mb-8 flex flex-wrap items-end gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Filtrar por Rol</label>
+<select class="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 font-body-sm text-body-sm min-w-[180px] focus:ring-primary focus:border-primary outline-none">
+<option>Todos los roles</option>
+<option>Cliente</option>
+<option>Proveedor</option>
+<option>Administrador</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Estado</label>
+<select class="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 font-body-sm text-body-sm min-w-[180px] focus:ring-primary focus:border-primary outline-none">
+<option>Cualquier estado</option>
+<option>Activo</option>
+<option>Inactivo</option>
+<option>Pendiente</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Rango de Fecha</label>
+<input class="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 font-body-sm text-body-sm focus:ring-primary focus:border-primary outline-none" type="date"/>
+</div>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2.5 rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors">
+                Limpiar Filtros
+            </button>
+</div>
+<!-- Users Table Card -->
+<div class="bg-surface-container-lowest rounded-xl card-shadow overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant bg-surface-container-low/50 flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Mostrando 124 usuarios</span>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container-high rounded transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="file_download">file_download</span>
+</button>
+<button class="p-1 hover:bg-surface-container-high rounded transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="print">print</span>
+</button>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Usuario</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Email</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Rol</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Estado</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Fecha Registro</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover" data-alt="Close up portrait of a smiling woman with glasses and dark hair. The background is a blurred high-end office interior with warm natural light. The photograph is captured in a high-quality professional style with shallow depth of field, emphasizing a clean and corporate modern look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIWLRCwnnrjEf_AZ8NnJRMl7w3dt5u1ixOAYLF_Pb2dyiih3xTugfl5RgEvko_l0k1rK3xmEGyRXmztwllsJYMFp9MB7qNMx9E3W-R-KXMQfVH9akoSFnxM-RLKS1VZvyeS_K1J4LkH6OEzwc7ku2MHKjBe2n_no8fjQgpBTUz_NAUHf_cjjaQJFbfJv3jSaqyumIAxBCCRx9mU6Vx2YkXWQGAk45LeKsi-cHEVgkfVCwwzJRsUI3pdk3jJHZlagah_t7yYRe7p4I"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Elena Rodríguez</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant">ID: SM-8821</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">elena.rod@example.com</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[11px]">CLIENTE</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                Activo
+                            </span>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">12 May 2023</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of a mature man with salt and pepper beard wearing a navy blue linen shirt. The setting is a brightly lit, modern studio with clean white surfaces. Lighting is sharp and professional, creating clear shadows and highlighting textures. The aesthetic is sophisticated and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKMQW9TjqcC9M4l-Bg28Vrfc8TFsm_xJrr6HeUBMzxCGPoO3RR0WhDbGM98A9dvfK0fGzsMA7t7D-BcQNxtWRUuDZeLJaDvq333xk6cJoClI7oR4HJPbrFB23ygjrijjDn3b00Wn24uZaSnJERjN6r0CDxd8QQnL6W7AZSRLxKBZ0oICo-Hy4aQ1ndMyrQx-yTTPzLiObxAeqyHwry3qmxHAf9cbeg90UnsXYAk78kIzwOiW4uu5pk7oFkcrSHxg0rirJhxRYhAsE"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Carlos Mendoza</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant">ID: SM-9042</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">c.mendoza@servihogar.cl</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[11px]">PROVEEDOR</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                Activo
+                            </span>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">28 Abr 2023</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a Black woman in a smart business suit, looking directly at the camera with a friendly expression. The background is a clean, bright, minimalist corporate lobby with soft indirect lighting. The overall style is reliable, professional, and sophisticated, consistent with the design tokens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu2IksVetATu7xGJVq1yAc8MwpGIZNccqzVRVgtDbmKw_HzRC1_P_0ybbHDF3oJzlzAHKKRF0mmDhbd6vyZdzXViUjLkt4aNQ34KFQ3y1g5ozklsk-Depe7Rj-BjK7xscK0ZwHTz_S0dXW2lb8DZUsbeRT79DxSaPIP9TDiA_4wPjyKRL-Yjr5eLuOFZipzkzQinHrHEEEvdm3_8hNq5DhdTiPIRXpOE9Ysl27ncEbokFzkCzRa_haeKiMBXdaideB0yIU5cLm2mo"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Marina Soto</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant">ID: SM-7741</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">m.soto@admin.sm.com</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-[11px]">ADMIN</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-error-container/40 text-error font-label-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                Inactivo
+                            </span>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">05 Ene 2023</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover" data-alt="Studio portrait of a young man with a friendly smile, styled with a modern corporate look. Soft, diffused lighting across a minimalist background in light gray tones. The visual mood is reliable and clean, emphasizing modern professionalism and digital platform management." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmqbRNEpdwcT_bABASmVL25X0cj2IV_u_Ziml64yfFm4_h--G8H4aBA1-4iWD4khKoQlN0pG4p8hri8ZZpBtpclYnzBP8JpvH922Uq9JBQjHZB2Ey8Ce17SP4fz6PXaNDDeEpdUF6wCEK8aQhJmwe7MY8XXtsI6USYq2SBiZgj2JVsRhct3Ws2gOVzFyH73PoV8Wxy7CTlZydwLpaOeHCbG_qLhBzBSOSTjExt85jJL4ABCN-ZNCB4Ea71Ttmkif5GoW7Y1o0p19A"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Ricardo Palma</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant">ID: SM-8109</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">r.palma@tecnicos.net</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[11px]">PROVEEDOR</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                Activo
+                            </span>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">15 Mar 2023</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="px-6 py-4 flex justify-between items-center bg-surface-container-low/30 border-t border-outline-variant">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Página 1 de 12</p>
+<div class="flex gap-2">
+<button class="px-4 py-2 border border-outline-variant rounded-lg font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-colors disabled:opacity-50" disabled="">Anterior</button>
+<button class="px-4 py-2 border border-outline-variant rounded-lg font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-colors">Siguiente</button>
+</div>
+</div>
+</div>
+<!-- Summary Widgets (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+<div class="bg-surface-container-lowest p-5 rounded-xl card-shadow border border-outline-variant/10">
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wide">Total Clientes</p>
+<div class="flex items-end justify-between mt-2">
+<h3 class="font-h2 text-h2 text-on-surface">1,248</h3>
+<span class="text-primary font-label-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span> +12%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl card-shadow border border-outline-variant/10">
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wide">Proveedores Activos</p>
+<div class="flex items-end justify-between mt-2">
+<h3 class="font-h2 text-h2 text-on-surface">432</h3>
+<span class="text-primary font-label-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span> +5%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl card-shadow border border-outline-variant/10">
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wide">Nuevos este mes</p>
+<div class="flex items-end justify-between mt-2">
+<h3 class="font-h2 text-h2 text-on-surface">86</h3>
+<span class="text-tertiary font-label-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="trending_down">trending_down</span> -2%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl card-shadow border border-outline-variant/10">
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wide">Tasa de Retención</p>
+<div class="flex items-end justify-between mt-2">
+<h3 class="font-h2 text-h2 text-on-surface">94.2%</h3>
+<div class="w-12 h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[94%]"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

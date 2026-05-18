@@ -1,6 +1,6 @@
-enum UserRole { client, provider }
+enum UserRole { client, provider, admin }
 
-enum UserStatus { active, suspended, deleted }
+enum UserStatus { active, inactive, suspended, deleted }
 
 class UserModel {
   const UserModel({
@@ -25,6 +25,7 @@ class UserModel {
 
   bool get isClient => role == UserRole.client;
   bool get isProvider => role == UserRole.provider;
+  bool get isAdmin => role == UserRole.admin;
 
   UserModel copyWith({
     String? id,

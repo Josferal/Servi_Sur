@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ServiMarket - Gestión de Servicios</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f5fbf5",
+                      "on-surface-variant": "#3d4a42",
+                      "surface-variant": "#dee4de",
+                      "secondary-fixed-dim": "#c6c6c9",
+                      "outline-variant": "#bccac0",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#ba5551",
+                      "on-background": "#171d19",
+                      "on-surface": "#171d19",
+                      "on-secondary-fixed-variant": "#454749",
+                      "tertiary-fixed": "#ffdad7",
+                      "background": "#f5fbf5",
+                      "on-primary-fixed": "#002114",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#2c322e",
+                      "surface-container-low": "#eff5ef",
+                      "inverse-primary": "#68dba9",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f5fbf5",
+                      "primary-container": "#00855d",
+                      "surface-container-high": "#e4eae4",
+                      "on-primary-fixed-variant": "#005137",
+                      "primary-fixed-dim": "#68dba9",
+                      "inverse-on-surface": "#ecf2ec",
+                      "error-container": "#ffdad6",
+                      "on-primary-container": "#f5fff7",
+                      "outline": "#6d7a72",
+                      "tertiary": "#9b3e3b",
+                      "on-secondary-fixed": "#1a1c1e",
+                      "secondary-container": "#e2e2e5",
+                      "primary-fixed": "#85f8c4",
+                      "surface-container": "#e9efe9",
+                      "on-tertiary-fixed-variant": "#7f2928",
+                      "secondary": "#5d5e61",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#e2e2e5",
+                      "tertiary-fixed-dim": "#ffb3ae",
+                      "on-tertiary-fixed": "#410004",
+                      "on-secondary-container": "#636467",
+                      "surface-dim": "#d5dcd6",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "primary": "#006948",
+                      "surface-container-highest": "#dee4de",
+                      "surface-tint": "#006c4a",
+                      "on-tertiary-container": "#fffbff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "sidebar-width": "260px",
+                      "unit": "8px",
+                      "card-gap": "24px",
+                      "container-padding": "32px"
+              },
+              "fontFamily": {
+                      "h1": ["Inter"],
+                      "h2": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display": ["Inter"],
+                      "h3": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "h2": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F7FA;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-surface-bright text-on-surface antialiased">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[260px] bg-on-background flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="font-h2 text-h2 font-bold text-surface-lowest">ServiMarket</h1>
+<p class="font-body-sm text-outline-variant opacity-70">Administración</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Usuarios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-on-primary rounded-lg mx-2" href="#">
+<span class="material-symbols-outlined">handyman</span>
+<span class="font-body-md">Servicios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-body-md">Órdenes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Configuración</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3 pt-6 border-t border-outline-variant/20">
+<img alt="Avatar de administrador" class="w-10 h-10 rounded-full border border-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOHSV8SrNWqgxMOznZCZ8WGpjncC8mQvVcHVlfia1PgcIbGnO3Au1e1wP8HJlgoXky5FcCLm-_QWlOBQcZ4rY1IeXG2yd4lK7hIVK2el8y1-Z3r-X2FtS5hFb969fuCj2JMPIjcq0hpjsXUqP8mhKAUGLnwEvOGqX5sZKTLxdWNNVRQHFWGU937XCkrbR-mRRHi84px90MuHjI_r2kKIuOpllNDi8IH9tlYAXXYhdUM1d7Aqy-HUWL5GynHnObWLlGeUAd1Z7bsQU"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-surface-lowest truncate">Admin Principal</p>
+<p class="text-[10px] text-outline-variant uppercase tracking-wider">Superuser</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="pl-[260px] min-h-screen">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-16 w-full px-8 bg-surface-bright border-b border-outline-variant sticky top-0 z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full font-label-md text-on-surface focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Buscar servicios, categorías o proveedores..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-6">
+<button class="hover:bg-surface-container-high rounded-full p-2 cursor-pointer transition-transform active:scale-95 text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container-high rounded-full p-2 cursor-pointer transition-transform active:scale-95 text-on-surface-variant">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-container-padding">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-h1 text-h1 text-on-background">Gestión de Servicios</h2>
+<p class="font-body-md text-on-surface-variant mt-1">Supervisa y administra el catálogo de servicios disponibles en el marketplace.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-lowest border border-outline-variant px-5 py-2.5 rounded-lg font-label-md text-on-background hover:bg-surface-container-high transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Exportar
+                    </button>
+<button class="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-md hover:brightness-90 transition-all shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Nuevo Servicio
+                    </button>
+</div>
+</div>
+<!-- Stats Overview (Asymmetric Layout) -->
+<div class="grid grid-cols-12 gap-card-gap mb-8">
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest p-6 rounded-xl custom-shadow border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-wider">Total Servicios</p>
+<h3 class="font-display text-h1 text-on-background">1,248</h3>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest p-6 rounded-xl custom-shadow border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-wider">Pendientes de Revisión</p>
+<h3 class="font-display text-h1 text-on-background">42</h3>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest p-6 rounded-xl custom-shadow border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-wider">Crecimiento Mensual</p>
+<h3 class="font-display text-h1 text-on-background">+12.4%</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Card -->
+<div class="bg-surface-container-lowest rounded-xl custom-shadow overflow-hidden border border-outline-variant/20">
+<div class="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low/30">
+<div class="flex gap-4">
+<button class="font-label-md text-primary border-b-2 border-primary pb-1 px-1">Todos</button>
+<button class="font-label-md text-on-surface-variant hover:text-on-surface transition-colors pb-1 px-1">Publicados</button>
+<button class="font-label-md text-on-surface-variant hover:text-on-surface transition-colors pb-1 px-1">Pendientes</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-on-surface-variant">Filtrar por:</span>
+<select class="bg-transparent border-none font-label-md text-on-surface focus:ring-0 cursor-pointer">
+<option>Recientes primero</option>
+<option>Precio: Mayor a menor</option>
+<option>Precio: Menor a mayor</option>
+</select>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Servicio</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Categoría</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Proveedor</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Precio</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Estado</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high/20 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container-high flex-shrink-0">
+<img alt="Servicio de Limpieza" class="w-full h-full object-cover" data-alt="A professional cleaning service scene showing a person with specialized equipment cleaning a bright, modern interior space. The lighting is crisp and airy, highlighting a sense of hygiene and meticulous care within a professional corporate or residential setting. The aesthetic is clean and minimal, using soft greens and bright whites to evoke a sense of trust and quality service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBovuSWsZ0mWQ7ibEK8Plvau4si2oUBXxnJjHRXVH2JM9aHtW3WbQgm4cngsFgC0uGj6WUctcskI2kys3Sev-tp0yur57ORCgkP9qApNAtztqQpW2lk4yt-uyL2mYZdQIivSNr8eHj_8BLOsu9DiLshEOqSlahDiOFBBS0aaEU6Rmf-5AafQ-LbTyml-824dVbXMeSgwLWumB7s0nCbeicO6CKtEd-MtTWsv2jWZC7VF7UmOzUQlZ7Gf4JVUaM85zRyPUT-c-Hdfxg"/>
+</div>
+<div>
+<p class="font-body-md font-semibold text-on-background">Limpieza Profunda Premium</p>
+<p class="font-label-sm text-on-surface-variant">ID: SV-8821</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">Hogar</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Prov 1" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwtkHZtms5aoyN8bxiUNe9QHbSPGNEJ_gqEexHI8h7xYJwnaAwuC4ljjWojP_Dz6WuWIN0T2lvI0o7XYLod3CxSz2ZF5MWYFcIb8vUjB0YF_uVPhEd_P7jsReywCsxBkyqA2GRwTCeDMh61iPuFDbGnbTyqEfCUGvjh4GekPrEadSQCCmQSnm0PwRbwXBplvDPdpvioC7ECALFwq0XAjUmdSopIsRwMsFDxbaS-nHPg59LdIzb3CCSoGexlwfPVXU6yyzlYzNfDJE"/>
+<span class="font-body-sm text-on-surface">Clean Masters S.A.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-body-md font-semibold text-on-background">$85.00</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        Publicado
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high/20 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container-high flex-shrink-0">
+<img alt="Reparación Técnica" class="w-full h-full object-cover" data-alt="A skilled technician repairing a high-tech appliance with precision tools in a well-lit workshop. The atmosphere is professional and orderly, featuring a palette of cool grays and technical greens. The lighting is focused and clear, emphasizing expertise, reliability, and modern maintenance services in a professional SaaS environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA83bWB0Ijc2IIMSMOh_yWidVCNKCz-Ux4BLwZyX687LaCfyYHga70Br0hlHxy1az6SkzTwSYvaT8piRf2BDBwAAKzID8_Xjt2nV-Cgb6RAuhXyt5w9adw0pCuFlEaXSS8p97ckAPW-MJez4YKMcO0ciQ-Hqmui7zqaRHmDW2igxjsxqx4hTrhN1579_qMKWAS0p0yhhk-M75deDFPbXMIq_PV5uZ_vc1bOEqG3Uz-JyZiLozdwW2z16QKdFcoHmqeZMwlb0y7c3P0"/>
+</div>
+<div>
+<p class="font-body-md font-semibold text-on-background">Reparación de Aire Acondicionado</p>
+<p class="font-label-sm text-on-surface-variant">ID: SV-8822</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">Técnico</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Prov 2" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ__9f8qG9Se1OHHIx-3gPksQ8X7dLBXwQUmgQmGviE5dyWG7Hs6K2Hkq62tziAlV9YGGlS6arCMgHcc3zKRAX8UgrkIeVWWxSncAThh4WpKjLVeWRgnPlkm79eT50rDfImp8M_OyDJofqt_PVXkP9Na6fRT1vsQWIqmcpxpJ2w4f-RAMF3I-qcg7EK3P4hpCRmSXDBReEe_2nkE5-ZEAXpFM2mY5DHi7jlbprk84JMaoxt_7F-t7BPOi0-RTCE0usj0jYEDVJb0A"/>
+<span class="font-body-sm text-on-surface">ClimaFix Express</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-body-md font-semibold text-on-background">$45.00</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-tertiary/10 text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                        Pendiente
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high/20 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container-high flex-shrink-0">
+<img alt="Electricidad" class="w-full h-full object-cover" data-alt="An electrician installing smart home systems with intricate wiring exposed in a contemporary house. The lighting is bright and natural, reflecting a sophisticated and safe electrical maintenance environment. The visual style is clean, sharp, and corporate, emphasizing technical proficiency and modern connectivity solutions with a professional green color scheme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx4_2khgmTQJYy6MoZTxxX2hLTfg8gNerWwX63hCgKLg4yNMtbNj-avZCt7GayuiunYtlxiJjFYd5qvoQSsgvnlQ4EgQeBPzliuWMeHMjXDEhh-u2t6vRWi7A1jP209m7axD4N8F1loyHy_qdomUxVdMRoyD_7VNEtYKW9m52OtwzO8SaOTbwSVxLgdZYLSjopOY1m0jMJVVWhaI595kE5eD3rTknoa55Hi_znfHz1nTfMqEtU3EuqFhHPzueBljU_NTkiWI0hKC8"/>
+</div>
+<div>
+<p class="font-body-md font-semibold text-on-background">Instalación Eléctrica Smart</p>
+<p class="font-label-sm text-on-surface-variant">ID: SV-8823</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">Mantenimiento</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Prov 3" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqxosK8gD-MPMGF2feVP8Eq6SieisXK-VIXCSU6h3CnESGt2bmBlrQKdKVCLsL3J2L5G3xdjN16-sBqylGhljHjqknOzgD7V3smbxmIGXUsZjTLWFHKRDddNrthbRPQRMWQRKWiy13zvis8gM-wmoPtx8b0GwMnWDPfDcke1LSz5DJf5z4Y4COkHbdr5xoX1ggsK14WUFe5D3DJ_NG1uxCqH6R86xglQf50jK3ulEBMAVY8IPEE48mSMVX5A_YZyRKwmUOa9zEyE0"/>
+<span class="font-body-sm text-on-surface">Voltio Solutions</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-body-md font-semibold text-on-background">$120.00</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        Publicado
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-high/20 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container-high flex-shrink-0">
+<img alt="Jardinería" class="w-full h-full object-cover" data-alt="A serene garden landscape being maintained by professional gardeners, featuring vibrant green lawns and meticulously trimmed plants. The sunlight is warm and golden, creating a peaceful and well-kept atmosphere. The aesthetic is organic yet professional, showcasing high-quality landscaping services through a palette of natural greens and earthy tones in a clean UI layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPtaJV9Fi_nQEhwNTnU7LRw-ObnmByAPZNlueyeErcUa12hK0GDgkNNZvlRH9IrvvDSBo5_O4NNCrzSZ6Az5K3jX-tBYnUJECZYg48JmbvQXGiP9pv33osvpp3Gp14fRHXR2a-wQpzwAeSv9mS215AqeCDYsp1GJ2jKilbZlamt7H9U4JL6HBxD1DdpSw3ANwstWq_Xgl7z77hW-yLjW5lRyXTqK-4KjbdNz78FB_hzB9Pa4hNcbrFHseXU6ICVicn26oeBLL51jY"/>
+</div>
+<div>
+<p class="font-body-md font-semibold text-on-background">Diseño de Paisajismo</p>
+<p class="font-label-sm text-on-surface-variant">ID: SV-8824</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">Exteriores</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Prov 4" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPsPx80rP0KUPZands1H3lAVxabUmV_sjI16LKFOeD4HV2S_6ifI_etRGFEzfb9HT1ciwbSadN5WNYxiGYtCovo2q1b0mAlAu1OkjjBmWFqsZZ0BWE7_M95Nc12W0BZ7Z64ZBR1SxRajYdfDDEqQvSqMGmqPZC5eKX-vIaS9C7sAFFasbd3Y0MKROMG8LWz65jqGjqWdOkibm6D22lJtnOAunMMxZvRGLzqFVkqWCsqwipAGB_8uuvz9xyf84KiOsN0O3SxRiI2Wk"/>
+<span class="font-body-sm text-on-surface">EcoGarden Design</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-body-md font-semibold text-on-background">$250.00</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        Publicado
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-outline-variant/10 flex items-center justify-between">
+<p class="font-label-sm text-on-surface-variant">Mostrando 1 a 4 de 1,248 resultados</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-label-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-sm">3</button>
+<span class="text-on-surface-variant font-label-sm">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Contextual Action (FAB alternative) -->
+<div class="mt-8 flex justify-end">
+<p class="font-label-sm text-on-surface-variant italic">Última actualización: hace 5 minutos</p>
+</div>
+</div>
+</main>
+</body></html>

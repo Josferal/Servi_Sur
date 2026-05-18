@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f5fbf5",
+                    "on-surface-variant": "#3d4a42",
+                    "surface-variant": "#dee4de",
+                    "secondary-fixed-dim": "#c6c6c9",
+                    "outline-variant": "#bccac0",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ba5551",
+                    "on-background": "#171d19",
+                    "on-surface": "#171d19",
+                    "on-secondary-fixed-variant": "#454749",
+                    "tertiary-fixed": "#ffdad7",
+                    "background": "#f5fbf5",
+                    "on-primary-fixed": "#002114",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2c322e",
+                    "surface-container-low": "#eff5ef",
+                    "inverse-primary": "#68dba9",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f5fbf5",
+                    "primary-container": "#00855d",
+                    "surface-container-high": "#e4eae4",
+                    "on-primary-fixed-variant": "#005137",
+                    "primary-fixed-dim": "#68dba9",
+                    "inverse-on-surface": "#ecf2ec",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#f5fff7",
+                    "outline": "#6d7a72",
+                    "tertiary": "#9b3e3b",
+                    "on-secondary-fixed": "#1a1c1e",
+                    "secondary-container": "#e2e2e5",
+                    "primary-fixed": "#85f8c4",
+                    "surface-container": "#e9efe9",
+                    "on-tertiary-fixed-variant": "#7f2928",
+                    "secondary": "#5d5e61",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#e2e2e5",
+                    "tertiary-fixed-dim": "#ffb3ae",
+                    "on-tertiary-fixed": "#410004",
+                    "on-secondary-container": "#636467",
+                    "surface-dim": "#d5dcd6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "primary": "#006948",
+                    "surface-container-highest": "#dee4de",
+                    "surface-tint": "#006c4a",
+                    "on-tertiary-container": "#fffbff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "sidebar-width": "260px",
+                    "unit": "8px",
+                    "card-gap": "24px",
+                    "container-padding": "32px"
+            },
+            "fontFamily": {
+                    "h1": ["Inter"],
+                    "h2": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"],
+                    "h3": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "h2": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F5F7FA; }
+        .card-shadow { shadow-color: rgba(0, 0, 0, 0.05); box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-surface-bright text-on-surface overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[260px] bg-on-background flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="font-h2 text-h2 font-bold text-surface-lowest">ServiMarket</h1>
+<p class="font-body-sm text-surface-variant opacity-70">Administración</p>
+</div>
+<nav class="flex-grow space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Usuarios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2" href="#">
+<span class="material-symbols-outlined">handyman</span>
+<span class="font-body-md">Servicios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-body-md">Órdenes</span>
+</a>
+<!-- Active Navigation -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-on-primary rounded-lg mx-2" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-surface-lowest transition-colors mx-2" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Configuración</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3 p-3 rounded-xl bg-on-secondary-fixed-variant/20">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed">person</span>
+</div>
+<div>
+<p class="font-label-md text-surface-lowest">Admin Central</p>
+<p class="text-[10px] text-surface-variant uppercase tracking-wider">Superuser</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="ml-[260px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-16 w-full pl-8 pr-8 bg-surface-bright border-b border-outline-variant sticky top-0 z-40">
+<div class="flex items-center gap-4 w-1/3">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary font-body-sm" placeholder="Buscar reportes, transacciones..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-2">
+<button class="hover:bg-surface-container-high rounded-full p-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="hover:bg-surface-container-high rounded-full p-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<img alt="Avatar de administrador" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a corporate male administrator in a clean-cut navy blue suit against a soft-focus office background. The lighting is bright and natural, reflecting a high-end light-mode aesthetic with a palette of soft whites and deep blues. The portrait is centered and exudes reliability and professional authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlXpODTumTTTqPx5H2SOxNB-x3Y5AxitsAHPynoGyHPK6QKUoOOtEE3CadPvNE8kehFCy8bztgp_S9F2NAe1SC0IgTkXkK9yJCfwDKCGC7hAGpzRhuAppETW3LcEAzeLafoSaTv-hdjSfTJG-UDj5L3rdWEkKsTj--_ByGlOz2SZ6aAPI9QcCcXovW01dws7RcHX7YbiX1tmueFvXDmEz831TS2NrqHNWYqmZp7eYIk2_-EIxh7hcGRbAAtQxT9I8RpxxdR8MP2jQ"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<main class="p-8 flex-grow">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-h1 text-h1 text-on-background mb-1">Reportes y Estadísticas</h2>
+<p class="font-body-md text-on-surface-variant">Análisis detallado del rendimiento de la plataforma ServiMarket.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface font-label-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">description</span>
+                        Exportar a PDF
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md hover:brightness-90 transition-all card-shadow">
+<span class="material-symbols-outlined text-[20px]">table_chart</span>
+                        Exportar a Excel
+                    </button>
+</div>
+</div>
+<!-- KPI Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30 card-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<span class="text-primary font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12.5%
+                        </span>
+</div>
+<p class="text-on-surface-variant font-label-md mb-1">Ingresos Totales</p>
+<h3 class="font-h2 text-h2 text-on-background">$42,850.00</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30 card-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary/10 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">assignment_turned_in</span>
+</div>
+<span class="text-primary font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +8.2%
+                        </span>
+</div>
+<p class="text-on-surface-variant font-label-md mb-1">Órdenes Completadas</p>
+<h3 class="font-h2 text-h2 text-on-background">1,248</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30 card-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-on-secondary-fixed-variant/10 rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant">person_add</span>
+</div>
+<span class="text-error font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> -2.1%
+                        </span>
+</div>
+<p class="text-on-surface-variant font-label-md mb-1">Nuevos Usuarios</p>
+<h3 class="font-h2 text-h2 text-on-background">312</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30 card-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-fixed-dim/30 rounded-lg">
+<span class="material-symbols-outlined text-on-primary-fixed-variant">star</span>
+</div>
+<span class="text-on-surface-variant font-label-sm">Promedio</span>
+</div>
+<p class="text-on-surface-variant font-label-md mb-1">Satisfacción Cliente</p>
+<h3 class="font-h2 text-h2 text-on-background">4.8 / 5.0</h3>
+</div>
+</div>
+<!-- Main Charts & Detailed Data Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Weekly Growth Bar Chart (Bento Style) -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 card-shadow">
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="font-h3 text-h3 text-on-background">Crecimiento Semanal</h3>
+<p class="text-on-surface-variant font-body-sm">Comparativa de ingresos por día (Semana Actual vs Anterior)</p>
+</div>
+<select class="bg-surface-container-low border-none rounded-lg font-label-md focus:ring-primary cursor-pointer text-on-surface-variant">
+<option>Últimos 7 días</option>
+<option>Últimos 30 días</option>
+</select>
+</div>
+<div class="h-[300px] flex items-end justify-between gap-4">
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[40%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[65%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Lun</span>
+</div>
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[55%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[80%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Mar</span>
+</div>
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[45%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[60%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Mié</span>
+</div>
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[70%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[95%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Jue</span>
+</div>
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[60%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[75%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Vie</span>
+</div>
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[30%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[50%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Sáb</span>
+</div>
+<!-- Bar Item -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/20 w-1/2 h-[20%] rounded-t-sm"></div>
+<div class="bg-primary w-1/2 h-[40%] rounded-t-sm group-hover:brightness-110 transition-all"></div>
+</div>
+<span class="mt-4 font-label-sm text-on-surface-variant">Dom</span>
+</div>
+</div>
+<div class="flex gap-6 mt-8 pt-6 border-t border-outline-variant/30">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+<span class="font-label-sm text-on-surface-variant">Semana Actual</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary/20 rounded-full"></div>
+<span class="font-label-sm text-on-surface-variant">Semana Anterior</span>
+</div>
+</div>
+</div>
+<!-- Provider Performance Indicators -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 card-shadow">
+<h3 class="font-h3 text-h3 text-on-background mb-6">Top Proveedores</h3>
+<div class="space-y-6">
+<!-- Provider Item -->
+<div class="flex items-center gap-4">
+<img alt="Proveedor 1" class="w-12 h-12 rounded-full object-cover" data-alt="Close up portrait of a smiling male service professional in a clean workshop setting. He is wearing a dark green polo shirt with subtle branding. The lighting is crisp and bright, following a modern corporate aesthetic. The overall mood is trust-inducing and highly professional with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiAB0ClYbhfYgsxbn3ctdAlqwKZtMusjckEISJkw8ln-NiJxS6DqwHA1TJ3293hcMqW9RuBhUEDiL_bndEa0eO9UoF5LCaOc4-JhyHO7aKP6Dy072jAoKHqeNa6Sf1G54uPMcoJnGLzgSht_Uk54Nf-NwJaIhtK8lDVbJZFO-j_b5xX5VWBjYdI1lJxn3UW-V-PLg4NhfM0Vf819_TSVzi4p3MuCW2saEATVljbKS4bsZF_VV8J-ryM7gugDZRRdJsLl2gy_-24wg"/>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<p class="font-label-md text-on-background">Juan Pérez</p>
+<p class="text-primary font-label-sm">98% Éxito</p>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98%]"></div>
+</div>
+</div>
+</div>
+<!-- Provider Item -->
+<div class="flex items-center gap-4">
+<img alt="Proveedor 2" class="w-12 h-12 rounded-full object-cover" data-alt="A professional portrait of a confident female technician with her hair tied back, wearing a neat light-grey uniform. She is in a bright, modern interior environment with plenty of natural light. The visual style is clean, corporate, and trustworthy, with a focus on high-quality light-mode presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-p2E5_TOXxYeiscBLsdIBqMGiLMQG9tq-6q8o0witNKqpZZoVDZwf5FTmJwra6C8cFQGKRuX5Hx80TWMxsLnMua6j93JqrAt0n-FRIq04yJBUAwCJ69e7z0TkMiCHH9k8YygJ1R44Nb_NbVhu_iU9qSlpbgs_LmYioN8GEG4Fp1KVWCeA__quZJVpnsZmXc2TSt0bI6Hl49V1U8fYEM1J256C5TcHRkf1LrDwORFBszmR2ElKJMc5py_acEznnjK-9OcYnf3je_k"/>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<p class="font-label-md text-on-background">Maria García</p>
+<p class="text-primary font-label-sm">94% Éxito</p>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[94%]"></div>
+</div>
+</div>
+</div>
+<!-- Provider Item -->
+<div class="flex items-center gap-4">
+<img alt="Proveedor 3" class="w-12 h-12 rounded-full object-cover" data-alt="A high-quality studio portrait of a male professional smiling warmly. He is dressed in a smart-casual white shirt and dark vest. The lighting is soft and flattering, creating a premium light-mode feel. The image is clean and bright, conveying expertise and accessibility in a corporate context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVKEr_Wbehx4njJyoXcVrj5ajR18u6Yo8ApZTbN1flSu6R5kC1DDYMSFFz7oqkgqE48AgOpyzB9i50CaHvvgPcpBEjpc8PSAQIL1BTh84LfS9UypbOQroTeXisrGf43lTzBuuKlJ6uQ1KGS_vG-ycNZT3NIWDDDbozvogR5mQ1AqbuLW7MmCUNQ8GdrICNdZUPxf3YlZPTgJ9AS8yqf0cQrFROWoCLicrwZDVRUKnk11rVOaBfL0CC55VagarlxOLYzXOXOOuFfHY"/>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<p class="font-label-md text-on-background">Carlos Ruiz</p>
+<p class="text-primary font-label-sm">89% Éxito</p>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[89%]"></div>
+</div>
+</div>
+</div>
+<!-- Provider Item -->
+<div class="flex items-center gap-4">
+<img alt="Proveedor 4" class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a young professional woman looking directly at the camera with a calm and capable expression. She is in a minimal, bright office environment with a palette of whites and soft greens. The lighting is even and bright, emphasizing a professional and modern look consistent with a high-end UI design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlBetRbCJW1f8q0ZytLRFlsisekyQ5MS5-lZ2Zf7KqBnW3PY2Kmgakec-4lovkmre9U9R7h3MCfP9xbpZQJrcxPesRvnFmB9HkpPI6I9Zrb_wDMfgo3XfDhCj_JsjQ5s5BfibLevaAWkR5R6AHYaFfSs-9cRu7D7AQBwxtHfVcUmwIjsxXI8hp5rdx92H4NQZS1esjBIRHsvIjQ17T3oDY5i78E0BJrzhicNd3rBlF993ZL_wh7gV0QR22mvFKaI9QJxO_qo_053I"/>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<p class="font-label-md text-on-background">Elena Torres</p>
+<p class="text-primary font-label-sm">82% Éxito</p>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[82%]"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 border border-outline text-on-surface-variant font-label-md rounded-lg hover:bg-surface-container-high transition-colors">
+                        Ver todos los proveedores
+                    </button>
+</div>
+</div>
+<!-- Detailed Table Section -->
+<div class="mt-8 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 card-shadow overflow-hidden">
+<div class="p-8 border-b border-outline-variant/30 flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-background">Transacciones Recientes</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-label-sm">En Vivo</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-sm uppercase tracking-wider">
+<tr>
+<th class="px-8 py-4">ID Transacción</th>
+<th class="px-8 py-4">Servicio</th>
+<th class="px-8 py-4">Cliente</th>
+<th class="px-8 py-4">Fecha</th>
+<th class="px-8 py-4">Monto</th>
+<th class="px-8 py-4">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer">
+<td class="px-8 py-4 font-label-md text-on-background">#SM-98234</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Fontanería de Emergencia</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Roberto Gómez</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">12 Oct, 2023</td>
+<td class="px-8 py-4 font-label-md text-on-background">$85.00</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-[12px] font-bold">Completado</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer">
+<td class="px-8 py-4 font-label-md text-on-background">#SM-98235</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Limpieza General</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Ana Martínez</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">12 Oct, 2023</td>
+<td class="px-8 py-4 font-label-md text-on-background">$45.00</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-[12px] font-bold">Completado</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer">
+<td class="px-8 py-4 font-label-md text-on-background">#SM-98236</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Reparación Eléctrica</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Sergio Luna</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">11 Oct, 2023</td>
+<td class="px-8 py-4 font-label-md text-on-background">$120.00</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-tertiary/10 text-tertiary rounded-full text-[12px] font-bold">Pendiente</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer">
+<td class="px-8 py-4 font-label-md text-on-background">#SM-98237</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Jardinería Mensual</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">Laura Ruiz</td>
+<td class="px-8 py-4 font-body-sm text-on-surface-variant">11 Oct, 2023</td>
+<td class="px-8 py-4 font-label-md text-on-background">$65.00</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-[12px] font-bold">Completado</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-low/50 flex justify-center">
+<button class="text-primary font-label-md hover:underline">Ver todas las transacciones</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

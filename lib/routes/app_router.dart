@@ -1,5 +1,14 @@
 import 'package:go_router/go_router.dart';
 
+import '../admin/core/admin_routes.dart';
+import '../admin/screens/admin_dashboard_screen.dart';
+import '../admin/screens/admin_login_screen.dart';
+import '../admin/screens/admin_orders_screen.dart';
+import '../admin/screens/admin_reports_screen.dart';
+import '../admin/screens/admin_services_screen.dart';
+import '../admin/screens/admin_settings_screen.dart';
+import '../admin/screens/admin_users_screen.dart';
+import '../admin/widgets/admin_shell.dart';
 import '../screens/activity/orders_history_screen.dart';
 import '../screens/activity/tracking_screen.dart';
 import '../screens/auth/login_screen.dart';
@@ -49,6 +58,39 @@ class AppRouter {
       GoRoute(
         path: '/provider',
         builder: (context, state) => const ProviderDashboardScreen(),
+      ),
+      GoRoute(
+        path: AdminRoutes.login,
+        builder: (context, state) => const AdminLoginScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => AdminShell(child: child),
+        routes: [
+          GoRoute(
+            path: AdminRoutes.dashboard,
+            builder: (context, state) => const AdminDashboardScreen(),
+          ),
+          GoRoute(
+            path: AdminRoutes.users,
+            builder: (context, state) => const AdminUsersScreen(),
+          ),
+          GoRoute(
+            path: AdminRoutes.services,
+            builder: (context, state) => const AdminServicesScreen(),
+          ),
+          GoRoute(
+            path: AdminRoutes.orders,
+            builder: (context, state) => const AdminOrdersScreen(),
+          ),
+          GoRoute(
+            path: AdminRoutes.reports,
+            builder: (context, state) => const AdminReportsScreen(),
+          ),
+          GoRoute(
+            path: AdminRoutes.settings,
+            builder: (context, state) => const AdminSettingsScreen(),
+          ),
+        ],
       ),
     ],
   );
