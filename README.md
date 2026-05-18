@@ -91,13 +91,6 @@ flutter build web
 - Exportación CSV en entorno web.
 - Arquitectura preparada para reemplazar mocks por Firebase o backend propio.
 
-## Capturas
-
-![Dashboard](docs/screenshots/dashboard.png)
-![Login administrativo](docs/screenshots/admin-login.png)
-![Home móvil](docs/screenshots/mobile-home.png)
-![Detalle de servicio](docs/screenshots/service-detail.png)
-
 ## Estructura Básica
 
 ```text
@@ -128,19 +121,6 @@ ios/
 
 El proyecto se encuentra en estado de prototipo avanzado para entrega académica. La navegación, UI, datos mock, dashboard web y exportación CSV están implementados. Las acciones administrativas críticas, autenticación real, persistencia de datos, pagos, mapas reales y reportes avanzados quedan pendientes para una versión productiva.
 
-## Video Demostrativo
 
-Agregar aquí el enlace del video de demostración:
 
-```text
-https://...
-```
 
-## Integrantes
-
-Completar con los integrantes del equipo:
-
-| Nombre | Rol |
-|---|---|
-| Integrante 1 | Desarrollo / documentación |
-| Integrante 2 | Desarrollo / pruebas |
