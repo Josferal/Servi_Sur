@@ -36,7 +36,7 @@ class ServiSurApp extends StatelessWidget {
           create: (context) =>
               CartProvider(context.read<MarketplaceRepository>()),
           update: (context, repository, provider) =>
-              provider!..updateRepository(repository),
+               provider!..updateRepository(repository),
         ),
         ChangeNotifierProxyProvider<AdminRepository, AdminDashboardProvider>(
           create: (context) =>

@@ -41,10 +41,22 @@ Ejecutar app móvil:
 flutter run
 ```
 
+Ejecutar app móvil y dejar el dashboard disponible en el puerto fijo `5764`:
+
+```powershell
+.\run_app_with_dashboard.bat
+```
+
+Ejecutar solo el dashboard web en `http://127.0.0.1:5764/admin`:
+
+```powershell
+.\run_dashboard_web.bat -OpenDashboard
+```
+
 Ejecutar dashboard web:
 
 ```bash
-flutter run -d chrome
+flutter run -d chrome --web-port 5764
 ```
 
 Compilar versión web:
