@@ -46,6 +46,12 @@ dependencies:
   share_plus: ^12.0.2
   shared_preferences: ^2.5.3
   url_launcher: ^6.3.2
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
+  firebase_storage: ^13.4.1
+  google_maps_flutter: ^2.17.0
+  firebase_messaging: ^16.2.2
 
 dev_dependencies:
   flutter_test:
