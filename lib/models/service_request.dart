@@ -32,6 +32,9 @@ class ServiceRequest {
     required this.status,
     required this.createdAt,
     this.photoUrls = const [],
+    this.imageUrls = const [],
+    this.imagePaths = const [],
+    this.attachments = const [],
     this.isEmergency = false,
     this.acceptedAt,
     this.cancelledAt,
@@ -56,6 +59,9 @@ class ServiceRequest {
   final ServiceRequestStatus status;
   final DateTime createdAt;
   final List<String> photoUrls;
+  final List<String> imageUrls;
+  final List<String> imagePaths;
+  final List<Map<String, dynamic>> attachments;
   final bool isEmergency;
   final DateTime? acceptedAt;
   final DateTime? cancelledAt;
@@ -80,6 +86,9 @@ class ServiceRequest {
     ServiceRequestStatus? status,
     DateTime? createdAt,
     List<String>? photoUrls,
+    List<String>? imageUrls,
+    List<String>? imagePaths,
+    List<Map<String, dynamic>>? attachments,
     bool? isEmergency,
     DateTime? acceptedAt,
     DateTime? cancelledAt,
@@ -104,6 +113,9 @@ class ServiceRequest {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       photoUrls: photoUrls ?? this.photoUrls,
+      imageUrls: imageUrls ?? this.imageUrls,
+      imagePaths: imagePaths ?? this.imagePaths,
+      attachments: attachments ?? this.attachments,
       isEmergency: isEmergency ?? this.isEmergency,
       acceptedAt: acceptedAt ?? this.acceptedAt,
       cancelledAt: cancelledAt ?? this.cancelledAt,
@@ -147,9 +159,10 @@ class ServiceRequest {
       currency: map['currency'] as String? ?? 'USD',
       status: _statusFromValue(map['status']),
       createdAt: _dateFromValue(map['createdAt']),
-      photoUrls: List<String>.from(
-        map['photoUrls'] as List<dynamic>? ?? const [],
-      ),
+      photoUrls: _stringListFromValue(map['photoUrls'] ?? map['imageUrls']),
+      imageUrls: _stringListFromValue(map['imageUrls'] ?? map['photoUrls']),
+      imagePaths: _stringListFromValue(map['imagePaths']),
+      attachments: _mapListFromValue(map['attachments']),
       isEmergency: map['isEmergency'] as bool? ?? false,
       acceptedAt: _nullableDateFromValue(map['acceptedAt']),
       cancelledAt: _nullableDateFromValue(map['cancelledAt']),
@@ -182,6 +195,9 @@ class ServiceRequest {
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'photoUrls': photoUrls,
+      'imageUrls': imageUrls,
+      'imagePaths': imagePaths,
+      'attachments': attachments,
       'isEmergency': isEmergency,
       'acceptedAt': acceptedAt?.toIso8601String(),
       'cancelledAt': cancelledAt?.toIso8601String(),
@@ -210,5 +226,22 @@ class ServiceRequest {
       return DateTime.tryParse(value);
     }
     return null;
+  }
+
+  static List<String> _stringListFromValue(Object? value) {
+    if (value is Iterable) {
+      return value.whereType<String>().toList();
+    }
+    return const [];
+  }
+
+  static List<Map<String, dynamic>> _mapListFromValue(Object? value) {
+    if (value is Iterable) {
+      return value
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
+    return const [];
   }
 }

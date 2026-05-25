@@ -270,6 +270,27 @@ class _ActiveOrderCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: AppColors.textSecondary),
                     ),
+                    if (order.imageUrls.isNotEmpty)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 4),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.photo_library_rounded,
+                              color: AppColors.orangeLight,
+                              size: 15,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              'Con fotos adjuntas',
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -370,6 +391,14 @@ class _OrderTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
+            if (order.imageUrls.isNotEmpty) ...[
+              const Icon(
+                Icons.photo_library_rounded,
+                color: AppColors.orangeLight,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+            ],
             Text(
               CurrencyFormatter.usd(order.total),
               style: TextStyle(

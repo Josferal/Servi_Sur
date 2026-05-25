@@ -201,6 +201,10 @@ class _TrackingContent extends StatelessWidget {
               ],
             ),
           ),
+          if (order.imageUrls.isNotEmpty) ...[
+            const SizedBox(height: 24),
+            _AttachedPhotos(imageUrls: order.imageUrls),
+          ],
           const SizedBox(height: 24),
           FilledButton(
             onPressed: () => context.go('/activity'),
@@ -210,6 +214,71 @@ class _TrackingContent extends StatelessWidget {
               minimumSize: const Size.fromHeight(54),
             ),
             child: const Text('Ver actividad'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AttachedPhotos extends StatelessWidget {
+  const _AttachedPhotos({required this.imageUrls});
+
+  final List<String> imageUrls;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.photo_library_rounded,
+                color: AppColors.orangeLight,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'Fotos adjuntas',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: 96,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: imageUrls.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: Image.network(
+                    imageUrls[index],
+                    width: 96,
+                    height: 96,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => Container(
+                      width: 96,
+                      height: 96,
+                      color: AppColors.surfaceHigh,
+                      child: const Icon(
+                        Icons.broken_image_rounded,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

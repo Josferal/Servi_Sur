@@ -50,4 +50,44 @@ void main() {
     expect(request.estimatedTotal, 42);
     expect(request.status, ServiceRequestStatus.pending);
   });
+
+  test('order tolerates missing image fields', () {
+    final order = Order.fromMap({'serviceTitle': 'Electricidad'});
+
+    expect(order.imageUrls, isEmpty);
+    expect(order.imagePaths, isEmpty);
+    expect(order.attachments, isEmpty);
+  });
+
+  test('order parses image metadata from Firestore maps', () {
+    final order = Order.fromMap({
+      'imageUrls': ['https://example.com/a.jpg'],
+      'imagePaths': ['request_images/u/o/a.jpg'],
+      'attachments': [
+        {
+          'url': 'https://example.com/a.jpg',
+          'path': 'request_images/u/o/a.jpg',
+        },
+      ],
+    });
+
+    expect(order.imageUrls, ['https://example.com/a.jpg']);
+    expect(order.imagePaths, ['request_images/u/o/a.jpg']);
+    expect(order.attachments.first['path'], 'request_images/u/o/a.jpg');
+  });
+
+  test('service request parses imageUrls and falls back from photoUrls', () {
+    final withImageUrls = ServiceRequest.fromMap({
+      'imageUrls': ['https://example.com/request.jpg'],
+      'imagePaths': ['request_images/u/r/request.jpg'],
+    });
+    final withPhotoUrls = ServiceRequest.fromMap({
+      'photoUrls': ['https://example.com/legacy.jpg'],
+    });
+
+    expect(withImageUrls.imageUrls, ['https://example.com/request.jpg']);
+    expect(withImageUrls.photoUrls, ['https://example.com/request.jpg']);
+    expect(withImageUrls.imagePaths, ['request_images/u/r/request.jpg']);
+    expect(withPhotoUrls.imageUrls, ['https://example.com/legacy.jpg']);
+  });
 }

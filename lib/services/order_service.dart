@@ -64,6 +64,9 @@ class OrderService {
       'currency': service.currency,
       'status': ServiceRequestStatus.pending.name,
       'photoUrls': <String>[],
+      'imageUrls': <String>[],
+      'imagePaths': <String>[],
+      'attachments': <Map<String, dynamic>>[],
       'isEmergency': isEmergency,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
@@ -99,6 +102,9 @@ class OrderService {
       'currency': request.currency,
       'status': OrderStatus.pending.name,
       'trackingStatus': OrderTrackingStatus.requested.name,
+      'imageUrls': request.imageUrls,
+      'imagePaths': request.imagePaths,
+      'attachments': request.attachments,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     };
@@ -197,6 +203,35 @@ class OrderService {
     return _orders.doc(orderId).update({
       if (status != null) 'status': status.name,
       if (trackingStatus != null) 'trackingStatus': trackingStatus.name,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> attachImagesToRequest({
+    required String requestId,
+    required List<String> imageUrls,
+    required List<String> imagePaths,
+    List<Map<String, dynamic>> attachments = const [],
+  }) {
+    return _requests.doc(requestId).update({
+      'photoUrls': imageUrls,
+      'imageUrls': imageUrls,
+      'imagePaths': imagePaths,
+      'attachments': attachments,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> attachImagesToOrder({
+    required String orderId,
+    required List<String> imageUrls,
+    required List<String> imagePaths,
+    List<Map<String, dynamic>> attachments = const [],
+  }) {
+    return _orders.doc(orderId).update({
+      'imageUrls': imageUrls,
+      'imagePaths': imagePaths,
+      'attachments': attachments,
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

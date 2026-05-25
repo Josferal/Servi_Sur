@@ -37,6 +37,9 @@ class Order {
     required this.currency,
     required this.status,
     required this.createdAt,
+    this.imageUrls = const [],
+    this.imagePaths = const [],
+    this.attachments = const [],
     this.completedAt,
     this.cancelledAt,
   });
@@ -63,6 +66,9 @@ class Order {
   final String currency;
   final OrderStatus status;
   final DateTime createdAt;
+  final List<String> imageUrls;
+  final List<String> imagePaths;
+  final List<Map<String, dynamic>> attachments;
   final DateTime? completedAt;
   final DateTime? cancelledAt;
 
@@ -97,6 +103,9 @@ class Order {
     String? currency,
     OrderStatus? status,
     DateTime? createdAt,
+    List<String>? imageUrls,
+    List<String>? imagePaths,
+    List<Map<String, dynamic>>? attachments,
     DateTime? completedAt,
     DateTime? cancelledAt,
   }) {
@@ -123,6 +132,9 @@ class Order {
       currency: currency ?? this.currency,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
+      imageUrls: imageUrls ?? this.imageUrls,
+      imagePaths: imagePaths ?? this.imagePaths,
+      attachments: attachments ?? this.attachments,
       completedAt: completedAt ?? this.completedAt,
       cancelledAt: cancelledAt ?? this.cancelledAt,
     );
@@ -167,6 +179,9 @@ class Order {
       currency: map['currency'] as String? ?? 'USD',
       status: _statusFromValue(map['status']),
       createdAt: _dateFromValue(map['createdAt']),
+      imageUrls: _stringListFromValue(map['imageUrls'] ?? map['photoUrls']),
+      imagePaths: _stringListFromValue(map['imagePaths']),
+      attachments: _mapListFromValue(map['attachments']),
       completedAt: _nullableDateFromValue(map['completedAt']),
       cancelledAt: _nullableDateFromValue(map['cancelledAt']),
     );
@@ -201,6 +216,9 @@ class Order {
       'currency': currency,
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
+      'imageUrls': imageUrls,
+      'imagePaths': imagePaths,
+      'attachments': attachments,
       'completedAt': completedAt?.toIso8601String(),
       'cancelledAt': cancelledAt?.toIso8601String(),
     };
@@ -237,5 +255,22 @@ class Order {
       return DateTime.tryParse(value);
     }
     return null;
+  }
+
+  static List<String> _stringListFromValue(Object? value) {
+    if (value is Iterable) {
+      return value.whereType<String>().toList();
+    }
+    return const [];
+  }
+
+  static List<Map<String, dynamic>> _mapListFromValue(Object? value) {
+    if (value is Iterable) {
+      return value
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
+    return const [];
   }
 }

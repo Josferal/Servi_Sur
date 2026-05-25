@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/navigation/app_navigation.dart';
@@ -9,6 +12,7 @@ import '../../providers/cart_provider.dart';
 import '../../repositories/marketplace_repository.dart';
 import '../../services/auth_service.dart';
 import '../../services/order_service.dart';
+import '../../services/storage_service.dart';
 import '../../services/user_profile_service.dart';
 import '../../widgets/cart/summary_row.dart';
 import '../../widgets/common/dark_input.dart';
@@ -22,11 +26,17 @@ class OrderSummaryScreen extends StatefulWidget {
 }
 
 class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
+  static const _maxImages = 3;
+  static const _maxImageBytes = StorageService.maxImageBytes;
+
   final _formKey = GlobalKey<FormState>();
+  final _imagePicker = ImagePicker();
   final _dateController = TextEditingController();
   final _timeController = TextEditingController(text: 'Mañana (08:00 - 12:00)');
   final _addressController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final List<XFile> _selectedImages = [];
+  final Map<String, Uint8List> _previewBytes = {};
   bool _isEmergency = false;
   bool _isSubmitting = false;
   String? _errorMessage;
@@ -186,10 +196,13 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
               const SizedBox(height: 24),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: _MiniOption(
                       icon: Icons.camera_alt_outlined,
-                      label: 'Adjuntar Fotos\n(Opcional)',
+                      label: _selectedImages.isEmpty
+                          ? 'Adjuntar Fotos\n(Opcional)'
+                          : '${_selectedImages.length}/$_maxImages fotos\nadjuntas',
+                      onTap: _isSubmitting ? null : _pickImages,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -205,6 +218,14 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   ),
                 ],
               ),
+              if (_selectedImages.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                _ImagePreviewStrip(
+                  images: _selectedImages,
+                  previewBytes: _previewBytes,
+                  onRemove: _isSubmitting ? null : _removeImage,
+                ),
+              ],
               const SizedBox(height: 28),
               Container(
                 padding: const EdgeInsets.all(22),
@@ -302,6 +323,72 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     return DateTime(year, month, day, 8);
   }
 
+  Future<void> _pickImages() async {
+    final remainingSlots = _maxImages - _selectedImages.length;
+    if (remainingSlots <= 0) {
+      _showSnackBar('Puedes adjuntar hasta $_maxImages fotos.');
+      return;
+    }
+
+    try {
+      final pickedImages = await _imagePicker.pickMultiImage(
+        imageQuality: 82,
+        limit: remainingSlots,
+      );
+      if (pickedImages.isEmpty) {
+        return;
+      }
+
+      var rejected = 0;
+      for (final image in pickedImages.take(remainingSlots)) {
+        final bytes = await image.readAsBytes();
+        if (bytes.length > _maxImageBytes || !_isImageFile(image)) {
+          rejected++;
+          continue;
+        }
+        _selectedImages.add(image);
+        _previewBytes[image.path] = bytes;
+      }
+
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+      if (rejected > 0) {
+        _showSnackBar('Algunas fotos superaban 5 MB o no eran imagenes.');
+      }
+    } catch (_) {
+      if (mounted) {
+        _showSnackBar('No se pudieron seleccionar las fotos.');
+      }
+    }
+  }
+
+  void _removeImage(int index) {
+    final image = _selectedImages.removeAt(index);
+    _previewBytes.remove(image.path);
+    setState(() {});
+  }
+
+  bool _isImageFile(XFile image) {
+    final mimeType = image.mimeType;
+    if (mimeType != null && mimeType.startsWith('image/')) {
+      return true;
+    }
+    final lower = image.name.toLowerCase();
+    return lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.png') ||
+        lower.endsWith('.webp') ||
+        lower.endsWith('.gif');
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
   Future<void> _confirmRequest() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
@@ -351,12 +438,84 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
         estimatedPrice: service.price + 3,
         isEmergency: _isEmergency,
       );
-      final order = await orderService.createOrderFromRequest(request);
+      final createdOrder = await orderService.createOrderFromRequest(request);
+      var order = createdOrder;
+      var requestWithImages = request;
+      var failedUploads = 0;
+
+      if (_selectedImages.isNotEmpty) {
+        final storageService = StorageService();
+        final uploadedImages = <UploadedRequestImage>[];
+
+        for (final image in _selectedImages) {
+          try {
+            final uploaded = await storageService.uploadRequestImage(
+              uid: user.uid,
+              orderId: createdOrder.id,
+              file: image,
+            );
+            uploadedImages.add(uploaded);
+          } catch (_) {
+            failedUploads++;
+          }
+        }
+
+        if (uploadedImages.isNotEmpty) {
+          final imageUrls = uploadedImages.map((image) => image.url).toList();
+          final imagePaths = uploadedImages.map((image) => image.path).toList();
+          final attachments = uploadedImages
+              .map((image) => image.toMap())
+              .toList();
+          try {
+            await orderService.attachImagesToRequest(
+              requestId: request.id,
+              imageUrls: imageUrls,
+              imagePaths: imagePaths,
+              attachments: attachments,
+            );
+            await orderService.attachImagesToOrder(
+              orderId: createdOrder.id,
+              imageUrls: imageUrls,
+              imagePaths: imagePaths,
+              attachments: attachments,
+            );
+            requestWithImages = request.copyWith(
+              photoUrls: imageUrls,
+              imageUrls: imageUrls,
+              imagePaths: imagePaths,
+              attachments: attachments,
+            );
+            order = createdOrder.copyWith(
+              imageUrls: imageUrls,
+              imagePaths: imagePaths,
+              attachments: attachments,
+            );
+          } catch (_) {
+            failedUploads = _selectedImages.length;
+            for (final image in uploadedImages) {
+              try {
+                await storageService.deleteImage(image.path);
+              } catch (_) {}
+            }
+          }
+        }
+      }
 
       if (!mounted) {
         return;
       }
-      cart.setConfirmedOrder(service: service, request: request, order: order);
+      if (failedUploads > 0) {
+        _showSnackBar(
+          failedUploads == _selectedImages.length
+              ? 'La orden se creo, pero no se pudieron subir las fotos.'
+              : 'La orden se creo con algunas fotos adjuntas.',
+        );
+      }
+      cart.setConfirmedOrder(
+        service: service,
+        request: requestWithImages,
+        order: order,
+      );
       context.go('/tracking?orderId=${order.id}');
     } catch (_) {
       if (!mounted) {
@@ -398,26 +557,99 @@ class _FormSection extends StatelessWidget {
 }
 
 class _MiniOption extends StatelessWidget {
-  const _MiniOption({required this.icon, required this.label});
+  const _MiniOption({required this.icon, required this.label, this.onTap});
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 116,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
+    return InkWell(
+      borderRadius: BorderRadius.circular(28),
+      onTap: onTap,
+      child: Container(
+        height: 116,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(28),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: AppColors.orangeLight),
+            const Spacer(),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w800)),
+          ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: AppColors.orangeLight),
-          const Spacer(),
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w800)),
-        ],
+    );
+  }
+}
+
+class _ImagePreviewStrip extends StatelessWidget {
+  const _ImagePreviewStrip({
+    required this.images,
+    required this.previewBytes,
+    required this.onRemove,
+  });
+
+  final List<XFile> images;
+  final Map<String, Uint8List> previewBytes;
+  final ValueChanged<int>? onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 86,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: images.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final image = images[index];
+          final bytes = previewBytes[image.path];
+          return Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: Container(
+                  width: 86,
+                  height: 86,
+                  color: AppColors.surface,
+                  child: bytes == null
+                      ? const Icon(
+                          Icons.image_rounded,
+                          color: AppColors.textMuted,
+                        )
+                      : Image.memory(bytes, fit: BoxFit.cover),
+                ),
+              ),
+              if (onRemove != null)
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: () => onRemove!(index),
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.72),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

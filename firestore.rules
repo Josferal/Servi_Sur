@@ -109,10 +109,23 @@ service cloud.firestore {
         && request.resource.data.status == 'convertedToOrder';
     }
 
+    function clientUpdatesOwnRequestImages() {
+      return isRequestClient()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'photoUrls',
+          'imageUrls',
+          'imagePaths',
+          'attachments',
+          'updatedAt'
+        ]);
+    }
+
     match /serviceRequests/{requestId} {
       allow create: if createsOwnServiceRequest() || isAdmin();
       allow get, list: if isRequestClient() || isRequestProvider() || isAdmin();
-      allow update: if clientUpdatesOwnRequestAfterOrderCreate() || isAdmin();
+      allow update: if clientUpdatesOwnRequestAfterOrderCreate()
+        || clientUpdatesOwnRequestImages()
+        || isAdmin();
       allow delete: if isAdmin();
     }
 
@@ -129,6 +142,16 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'status',
           'trackingStatus',
+          'updatedAt'
+        ]);
+    }
+
+    function clientUpdatesOwnOrderImages() {
+      return isOrderClient()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'imageUrls',
+          'imagePaths',
+          'attachments',
           'updatedAt'
         ]);
     }
@@ -154,7 +177,9 @@ service cloud.firestore {
     match /orders/{orderId} {
       allow create: if createsOwnOrder() || isAdmin();
       allow get, list: if isOrderClient() || isOrderProvider() || isAdmin();
-      allow update: if providerUpdatesControlledOrderFields() || isAdmin();
+      allow update: if providerUpdatesControlledOrderFields()
+        || clientUpdatesOwnOrderImages()
+        || isAdmin();
       allow delete: if isAdmin();
     }
 
