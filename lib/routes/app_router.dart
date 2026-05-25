@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
 import '../admin/core/admin_routes.dart';
@@ -19,10 +22,61 @@ import '../screens/home/services_list_screen.dart';
 import '../screens/product/service_detail_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/provider/provider_dashboard_screen.dart';
+import '../services/auth_service.dart';
+import '../services/user_profile_service.dart';
 
 class AppRouter {
+  static final _authService = AuthService();
+  static final _profileService = UserProfileService();
+
   static final router = GoRouter(
     initialLocation: '/login',
+    refreshListenable: GoRouterRefreshStream(_authService.authStateChanges),
+    redirect: (context, state) async {
+      final location = state.uri.path;
+      final isAuthRoute =
+          location == '/login' ||
+          location == '/register' ||
+          location == AdminRoutes.login;
+      final isPrivateRoute = _isPrivateRoute(location);
+      final user = _authService.currentUser;
+
+      if (user == null) {
+        return isPrivateRoute ? '/login' : null;
+      }
+
+      final profile = await _profileService.ensureUserProfile(
+        uid: user.uid,
+        email: user.email ?? '',
+        name: user.displayName,
+      );
+
+      if (!_profileService.isActive(profile)) {
+        await _authService.signOut();
+        return '/login';
+      }
+
+      final role = profile['role'] as String? ?? 'client';
+      final roleHome = _routeForRole(role);
+
+      if (isAuthRoute) {
+        return roleHome;
+      }
+
+      if (role == 'client' && _isProviderOrAdminRoute(location)) {
+        return '/home';
+      }
+
+      if (role == 'provider' && _isAdminRoute(location)) {
+        return '/provider';
+      }
+
+      if (role == 'admin' && _isClientRoute(location)) {
+        return AdminRoutes.dashboard;
+      }
+
+      return null;
+    },
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
@@ -49,7 +103,8 @@ class AppRouter {
       ),
       GoRoute(
         path: '/tracking',
-        builder: (context, state) => const TrackingScreen(),
+        builder: (context, state) =>
+            TrackingScreen(orderId: state.uri.queryParameters['orderId']),
       ),
       GoRoute(
         path: '/profile',
@@ -94,4 +149,57 @@ class AppRouter {
       ),
     ],
   );
+
+  static bool _isPrivateRoute(String location) {
+    return _isClientRoute(location) ||
+        location == '/provider' ||
+        _isAdminRoute(location);
+  }
+
+  static bool _isClientRoute(String location) {
+    return location == '/home' ||
+        location == '/services' ||
+        location.startsWith('/service/') ||
+        location == '/order-summary' ||
+        location == '/activity' ||
+        location == '/tracking' ||
+        location == '/profile';
+  }
+
+  static bool _isAdminRoute(String location) {
+    return location == AdminRoutes.dashboard ||
+        location.startsWith('${AdminRoutes.dashboard}/') &&
+            location != AdminRoutes.login;
+  }
+
+  static bool _isProviderOrAdminRoute(String location) {
+    return location == '/provider' || _isAdminRoute(location);
+  }
+
+  static String _routeForRole(String role) {
+    switch (role) {
+      case 'admin':
+        return AdminRoutes.dashboard;
+      case 'provider':
+        return '/provider';
+      case 'client':
+      default:
+        return '/home';
+    }
+  }
+}
+
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 }

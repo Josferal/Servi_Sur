@@ -7,6 +7,9 @@ import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../providers/cart_provider.dart';
 import '../../repositories/marketplace_repository.dart';
+import '../../services/auth_service.dart';
+import '../../services/order_service.dart';
+import '../../services/user_profile_service.dart';
 import '../../widgets/cart/summary_row.dart';
 import '../../widgets/common/dark_input.dart';
 import '../../widgets/common/primary_button.dart';
@@ -25,6 +28,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   final _addressController = TextEditingController();
   final _descriptionController = TextEditingController();
   bool _isEmergency = false;
+  bool _isSubmitting = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -227,11 +232,23 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              PrimaryButton(
-                label: 'Confirmar solicitud',
-                icon: Icons.arrow_forward_rounded,
-                onPressed: () => _confirmRequest(context),
-              ),
+              if (_errorMessage != null) ...[
+                Text(
+                  _errorMessage!,
+                  style: const TextStyle(
+                    color: AppColors.danger,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
+              _isSubmitting
+                  ? const Center(child: CircularProgressIndicator())
+                  : PrimaryButton(
+                      label: 'Confirmar solicitud',
+                      icon: Icons.arrow_forward_rounded,
+                      onPressed: _confirmRequest,
+                    ),
               const SizedBox(height: 14),
               const Center(
                 child: Text(
@@ -285,26 +302,75 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     return DateTime(year, month, day, 8);
   }
 
-  void _confirmRequest(BuildContext context) {
+  Future<void> _confirmRequest() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
     }
 
     final cart = context.read<CartProvider>();
     final repository = context.read<MarketplaceRepository>();
-    final service = cart.selectedService ?? repository.getServices().first;
+    final services = repository.getServices();
+    final service =
+        cart.selectedService ?? (services.isEmpty ? null : services.first);
+    final user = AuthService().currentUser;
 
-    cart.confirmRequest(
-      ServiceRequestDraft(
+    if (user == null) {
+      context.go('/login');
+      return;
+    }
+    if (service == null) {
+      setState(() => _errorMessage = 'Selecciona un servicio para continuar.');
+      return;
+    }
+
+    setState(() {
+      _isSubmitting = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final profile = await UserProfileService().ensureUserProfile(
+        uid: user.uid,
+        email: user.email ?? '',
+        name: user.displayName,
+      );
+      final clientName = (profile['name'] as String?)?.trim().isNotEmpty == true
+          ? profile['name'] as String
+          : user.displayName ?? 'No definido';
+      final clientEmail = user.email ?? profile['email'] as String? ?? '';
+      final orderService = OrderService();
+      final request = await orderService.createServiceRequest(
         service: service,
+        clientId: user.uid,
+        clientName: clientName,
+        clientEmail: clientEmail,
+        description: _descriptionController.text,
         addressText: _addressController.text,
-        preferredDate: _parseDate(_dateController.text)!,
-        timeSlot: _timeController.text,
-        problemDescription: _descriptionController.text,
+        scheduledDate: _parseDate(_dateController.text)!,
+        scheduledTime: _timeController.text,
+        estimatedPrice: service.price + 3,
         isEmergency: _isEmergency,
-      ),
-    );
-    context.push('/tracking');
+      );
+      final order = await orderService.createOrderFromRequest(request);
+
+      if (!mounted) {
+        return;
+      }
+      cart.setConfirmedOrder(service: service, request: request, order: order);
+      context.go('/tracking?orderId=${order.id}');
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(
+        () =>
+            _errorMessage = 'No se pudo crear la solicitud. Intenta de nuevo.',
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
   }
 }
 

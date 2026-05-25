@@ -7,6 +7,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('BIENVENIDO'), findsOneWidget);
-    expect(find.text('Iniciar Sesión'), findsOneWidget);
+    expect(find.text('Iniciar Sesion'), findsOneWidget);
   });
 }

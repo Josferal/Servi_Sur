@@ -11,6 +11,7 @@ import '../../models/review.dart';
 import '../../models/service_item.dart';
 import '../../models/user_model.dart';
 import '../../providers/cart_provider.dart';
+import '../../repositories/firebase_marketplace_repository.dart';
 import '../../repositories/marketplace_repository.dart';
 import '../../widgets/common/primary_button.dart';
 import '../../widgets/common/rating_badge.dart';
@@ -40,9 +41,13 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final repository = context.watch<MarketplaceRepository>();
+    final firebaseRepository = repository is FirebaseMarketplaceRepository
+        ? repository
+        : null;
     final service = repository.findServiceById(widget.serviceId);
 
-    if (_isLoading) {
+    if (_isLoading ||
+        (service == null && firebaseRepository?.isLoading == true)) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 

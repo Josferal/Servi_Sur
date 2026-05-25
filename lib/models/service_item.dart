@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 enum ServicePricingType { fixed, hourly, visit, project }
@@ -126,21 +127,25 @@ class ServiceItem {
       price: (map['price'] as num?)?.toDouble() ?? 0,
       currency: map['currency'] as String? ?? 'USD',
       pricingType: ServicePricingType.values.byName(
-        map['pricingType'] as String? ?? 'fixed',
+        map['pricingType'] as String? ?? map['priceType'] as String? ?? 'fixed',
       ),
       rating: (map['rating'] as num?)?.toDouble() ?? 0,
-      reviewCount: map['reviewCount'] as int? ?? 0,
-      distance: map['distance'] as String? ?? '',
+      reviewCount:
+          (map['reviewCount'] as num?)?.toInt() ??
+          (map['reviewsCount'] as num?)?.toInt() ??
+          0,
+      distance:
+          map['distance'] as String? ?? map['locationText'] as String? ?? '',
       duration: map['duration'] as String? ?? '',
       badge: map['badge'] as String? ?? '',
       badgeColor: map['badgeColorValue'] == null
           ? null
           : Color(map['badgeColorValue'] as int),
       tags: List<String>.from(map['tags'] as List<dynamic>? ?? const []),
-      status: ServiceStatus.values.byName(map['status'] as String? ?? 'active'),
+      status: _statusFromMap(map),
       isFeatured: map['isFeatured'] as bool? ?? false,
-      createdAt: DateTime.tryParse(map['createdAt'] as String? ?? ''),
-      updatedAt: DateTime.tryParse(map['updatedAt'] as String? ?? ''),
+      createdAt: _dateFromValue(map['createdAt']),
+      updatedAt: _dateFromValue(map['updatedAt']),
     );
   }
 
@@ -157,17 +162,45 @@ class ServiceItem {
       'price': price,
       'currency': currency,
       'pricingType': pricingType.name,
+      'priceType': pricingType.name,
       'rating': rating,
       'reviewCount': reviewCount,
+      'reviewsCount': reviewCount,
       'distance': distance,
+      'locationText': distance,
       'duration': duration,
       'badge': badge,
       'badgeColorValue': badgeColor?.toARGB32(),
       'tags': tags,
       'status': status.name,
+      'isActive': status == ServiceStatus.active,
       'isFeatured': isFeatured,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
+  }
+
+  static ServiceStatus _statusFromMap(Map<String, dynamic> map) {
+    final rawStatus = map['status'] as String?;
+    if (rawStatus != null && rawStatus.isNotEmpty) {
+      try {
+        return ServiceStatus.values.byName(rawStatus);
+      } on ArgumentError {
+        return ServiceStatus.active;
+      }
+    }
+
+    final isActive = map['isActive'] as bool?;
+    return isActive == false ? ServiceStatus.paused : ServiceStatus.active;
+  }
+
+  static DateTime? _dateFromValue(Object? value) {
+    if (value is Timestamp) {
+      return value.toDate();
+    }
+    if (value is String) {
+      return DateTime.tryParse(value);
+    }
+    return null;
   }
 }

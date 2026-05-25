@@ -31,11 +31,22 @@ class CartProvider extends ChangeNotifier {
   }
 
   OrderCreationResult confirmRequest(ServiceRequestDraft draft) {
-    final result = _repository.createMockOrder(draft);
+    final result = _repository.createOrder(draft);
     _selectedService = draft.service;
     _currentRequest = result.request;
     _activeOrder = result.order;
     notifyListeners();
     return result;
+  }
+
+  void setConfirmedOrder({
+    required ServiceItem service,
+    required ServiceRequest request,
+    required Order order,
+  }) {
+    _selectedService = service;
+    _currentRequest = request;
+    _activeOrder = order;
+    notifyListeners();
   }
 }

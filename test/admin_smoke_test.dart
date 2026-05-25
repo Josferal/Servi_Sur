@@ -3,11 +3,11 @@ import 'package:servi_sur/main.dart';
 import 'package:servi_sur/routes/app_router.dart';
 
 void main() {
-  testWidgets('admin dashboard renders', (tester) async {
+  testWidgets('admin route requires authentication', (tester) async {
     AppRouter.router.go('/admin');
     await tester.pumpWidget(const ServiSurApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Panel de Control'), findsOneWidget);
+    expect(find.text('BIENVENIDO'), findsOneWidget);
   });
 }

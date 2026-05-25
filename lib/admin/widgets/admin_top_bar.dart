@@ -78,7 +78,7 @@ class AdminTopBar extends StatelessWidget {
             onPressed: () async {
               await AdminSessionService().signOut();
               if (context.mounted) {
-                context.go('/admin/login');
+                context.go('/login');
               }
             },
           ),

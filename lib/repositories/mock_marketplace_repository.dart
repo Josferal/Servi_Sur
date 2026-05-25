@@ -10,7 +10,7 @@ import '../models/user_model.dart';
 import '../services/mock_marketplace_service.dart';
 import 'marketplace_repository.dart';
 
-class MockMarketplaceRepository implements MarketplaceRepository {
+class MockMarketplaceRepository extends MarketplaceRepository {
   MockMarketplaceRepository()
     : _orders = [...MockMarketplaceService.orders],
       _requests = [...MockMarketplaceService.serviceRequests];
@@ -63,8 +63,7 @@ class MockMarketplaceRepository implements MarketplaceRepository {
       displayName: service.providerName,
       businessName: service.providerName,
       specialty: service.categoryName,
-      email:
-          '${service.providerName.toLowerCase().replaceAll(' ', '.')}@servisur.app',
+      email: 'No definido',
       phone: '+506 8888 4545',
       rating: service.rating,
       reviewCount: service.reviewCount,
@@ -93,7 +92,7 @@ class MockMarketplaceRepository implements MarketplaceRepository {
   }
 
   @override
-  OrderCreationResult createMockOrder(ServiceRequestDraft draft) {
+  OrderCreationResult createOrder(ServiceRequestDraft draft) {
     final now = DateTime.now();
     final timestamp = now.millisecondsSinceEpoch;
     final requestId = 'request-$timestamp';
@@ -144,5 +143,10 @@ class MockMarketplaceRepository implements MarketplaceRepository {
     _orders.insert(0, order);
 
     return OrderCreationResult(request: request, order: order);
+  }
+
+  @override
+  OrderCreationResult createMockOrder(ServiceRequestDraft draft) {
+    return createOrder(draft);
   }
 }

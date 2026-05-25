@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../models/address.dart';
 import '../models/client_profile.dart';
 import '../models/order.dart';
@@ -33,7 +35,7 @@ class OrderCreationResult {
   final Order order;
 }
 
-abstract class MarketplaceRepository {
+abstract class MarketplaceRepository extends ChangeNotifier {
   UserModel get currentUser;
   ClientProfile get currentClientProfile;
   ProviderProfile get featuredProviderProfile;
@@ -48,5 +50,6 @@ abstract class MarketplaceRepository {
   Order? getActiveOrder();
   List<Review> getReviewsForService(String serviceId);
 
+  OrderCreationResult createOrder(ServiceRequestDraft draft);
   OrderCreationResult createMockOrder(ServiceRequestDraft draft);
 }

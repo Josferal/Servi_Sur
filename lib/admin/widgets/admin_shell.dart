@@ -59,7 +59,7 @@ class AdminShell extends StatelessWidget {
                                 onPressed: () async {
                                   await AdminSessionService().signOut();
                                   if (context.mounted) {
-                                    context.go('/admin/login');
+                                    context.go('/login');
                                   }
                                 },
                                 icon: const Icon(Icons.logout_rounded),

@@ -1,0 +1,168 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status == 'active';
+    }
+
+    function createsOwnBaseProfile(uid) {
+      return isOwner(uid)
+        && request.resource.data.keys().hasAll([
+          'uid',
+          'email',
+          'role',
+          'status'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'uid',
+          'id',
+          'name',
+          'fullName',
+          'email',
+          'phone',
+          'avatarUrl',
+          'role',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ])
+        && request.resource.data.uid == uid
+        && request.resource.data.role == 'client'
+        && request.resource.data.status == 'active';
+    }
+
+    function updatesOnlySafeOwnFields() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'name',
+        'fullName',
+        'phone',
+        'avatarUrl',
+        'updatedAt'
+      ]);
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if createsOwnBaseProfile(uid) || isAdmin();
+      allow update: if isAdmin() || (isOwner(uid) && updatesOnlySafeOwnFields());
+      allow delete: if isAdmin();
+    }
+
+    function isActiveMarketplaceDocument() {
+      return resource.data.isActive == true
+        && (!('status' in resource.data) || resource.data.status == 'active');
+    }
+
+    match /categories/{categoryId} {
+      allow get, list: if signedIn() && isActiveMarketplaceDocument();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /services/{serviceId} {
+      allow get, list: if signedIn() && isActiveMarketplaceDocument();
+      allow create, update, delete: if isAdmin();
+    }
+
+    function isRequestClient() {
+      return signedIn() && resource.data.clientId == request.auth.uid;
+    }
+
+    function isRequestProvider() {
+      return signedIn() && resource.data.providerId == request.auth.uid;
+    }
+
+    function createsOwnServiceRequest() {
+      return signedIn()
+        && request.resource.data.keys().hasAll([
+          'id',
+          'clientId',
+          'serviceId',
+          'providerId',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ])
+        && request.resource.data.clientId == request.auth.uid
+        && request.resource.data.status == 'pending';
+    }
+
+    function clientUpdatesOwnRequestAfterOrderCreate() {
+      return isRequestClient()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status',
+          'updatedAt',
+          'orderId'
+        ])
+        && request.resource.data.status == 'convertedToOrder';
+    }
+
+    match /serviceRequests/{requestId} {
+      allow create: if createsOwnServiceRequest() || isAdmin();
+      allow get, list: if isRequestClient() || isRequestProvider() || isAdmin();
+      allow update: if clientUpdatesOwnRequestAfterOrderCreate() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    function isOrderClient() {
+      return signedIn() && resource.data.clientId == request.auth.uid;
+    }
+
+    function isOrderProvider() {
+      return signedIn() && resource.data.providerId == request.auth.uid;
+    }
+
+    function providerUpdatesControlledOrderFields() {
+      return isOrderProvider()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status',
+          'trackingStatus',
+          'updatedAt'
+        ]);
+    }
+
+    function createsOwnOrder() {
+      return signedIn()
+        && request.resource.data.keys().hasAll([
+          'id',
+          'requestId',
+          'clientId',
+          'serviceId',
+          'providerId',
+          'status',
+          'trackingStatus',
+          'createdAt',
+          'updatedAt'
+        ])
+        && request.resource.data.clientId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.trackingStatus == 'requested';
+    }
+
+    match /orders/{orderId} {
+      allow create: if createsOwnOrder() || isAdmin();
+      allow get, list: if isOrderClient() || isOrderProvider() || isAdmin();
+      allow update: if providerUpdatesControlledOrderFields() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // TODO(firebase): Move admin authorization to custom claims and/or Cloud
+    // Functions before production hardening. Frontend role checks are not a
+    // security boundary.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

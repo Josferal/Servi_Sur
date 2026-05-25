@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../core/admin_colors.dart';
 import '../core/admin_theme.dart';
 import '../services/admin_session_service.dart';
+import '../../services/auth_service.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -14,8 +15,8 @@ class AdminLoginScreen extends StatefulWidget {
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final _session = AdminSessionService();
-  final _emailController = TextEditingController(text: 'admin@servimarket.com');
-  final _passwordController = TextEditingController(text: 'admin123');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _remember = true;
   bool _loading = false;
   String? _errorMessage;
@@ -41,29 +42,52 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   }
 
   Future<void> _submit() async {
+    if (_emailController.text.trim().isEmpty ||
+        _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Ingrese email y contrasena.';
+      });
+      return;
+    }
+
     setState(() {
       _loading = true;
       _errorMessage = null;
     });
 
-    final signedIn = await _session.signIn(
-      email: _emailController.text,
-      password: _passwordController.text,
-      remember: _remember,
-    );
-    if (!mounted) {
-      return;
-    }
+    try {
+      final signedIn = await _session.signIn(
+        email: _emailController.text,
+        password: _passwordController.text,
+        remember: _remember,
+      );
+      if (!mounted) {
+        return;
+      }
 
-    if (signedIn) {
-      context.go('/admin');
-      return;
-    }
+      if (signedIn) {
+        context.go('/admin');
+        return;
+      }
 
-    setState(() {
-      _loading = false;
-      _errorMessage = 'Credenciales administrativas invalidas.';
-    });
+      setState(() {
+        _errorMessage = 'Esta cuenta no tiene permisos administrativos.';
+      });
+    } on AuthServiceException catch (error) {
+      if (mounted) {
+        setState(() => _errorMessage = error.message);
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _errorMessage = 'No se pudo validar el acceso administrativo.',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   @override

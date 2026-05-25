@@ -50,7 +50,7 @@ class MockAdminRepository implements AdminRepository {
   UserModel get currentAdmin => UserModel(
     id: 'admin-001',
     fullName: 'Admin Principal',
-    email: 'admin@servimarket.com',
+    email: 'No definido',
     phone: '+506 2222 0000',
     role: UserRole.admin,
     createdAt: DateTime(2025, 1, 5),
@@ -60,7 +60,7 @@ class MockAdminRepository implements AdminRepository {
   @override
   AdminSettings getSettings() => const AdminSettings(
     platformName: 'ServiMarket Marketplace',
-    supportEmail: 'soporte@servimarket.com',
+    supportEmail: 'No definido',
     maintenanceMode: false,
     notificationsEnabled: true,
     manualProviderApproval: true,
@@ -86,7 +86,7 @@ class MockAdminRepository implements AdminRepository {
       UserModel(
         id: 'client-002',
         fullName: 'Elena Rodriguez',
-        email: 'elena.rod@example.com',
+        email: 'No definido',
         phone: '+506 8888 9080',
         role: UserRole.client,
         createdAt: DateTime(2026, 3, 12),
@@ -94,7 +94,7 @@ class MockAdminRepository implements AdminRepository {
       UserModel(
         id: 'provider-002',
         fullName: 'Carlos Mendoza',
-        email: 'carlos.mendoza@servimarket.com',
+        email: 'No definido',
         phone: '+506 8888 6767',
         role: UserRole.provider,
         createdAt: DateTime(2026, 2, 4),
@@ -102,7 +102,7 @@ class MockAdminRepository implements AdminRepository {
       UserModel(
         id: 'client-003',
         fullName: 'Marina Soto',
-        email: 'marina.soto@example.com',
+        email: 'No definido',
         phone: '+506 7777 3311',
         role: UserRole.client,
         createdAt: DateTime(2026, 1, 21),
@@ -111,7 +111,7 @@ class MockAdminRepository implements AdminRepository {
       UserModel(
         id: 'provider-003',
         fullName: 'Ricardo Palma',
-        email: 'ricardo.palma@tecnicos.net',
+        email: 'No definido',
         phone: '+506 8700 6677',
         role: UserRole.provider,
         createdAt: DateTime(2025, 12, 9),
@@ -404,6 +404,9 @@ class MockAdminRepository implements AdminRepository {
 
   String _orderStatusLabel(OrderStatus status) {
     return switch (status) {
+      OrderStatus.pending => 'Pendiente',
+      OrderStatus.accepted => 'Aceptada',
+      OrderStatus.inProgress => 'En proceso',
       OrderStatus.active => 'En proceso',
       OrderStatus.completed => 'Completada',
       OrderStatus.cancelled => 'Cancelada',

@@ -15,7 +15,7 @@ class MockMarketplaceService {
   static final clientUser = UserModel(
     id: 'user-client-001',
     fullName: 'Alejandro Silva',
-    email: 'alejandro.silva@servisur.app',
+    email: 'No definido',
     phone: '+506 8888 1212',
     role: UserRole.client,
     avatarUrl:
@@ -26,7 +26,7 @@ class MockMarketplaceService {
   static final providerUser = UserModel(
     id: 'user-provider-001',
     fullName: 'Alejandro Rivera',
-    email: 'alejandro.rivera@servisur.app',
+    email: 'No definido',
     phone: '+506 8888 4545',
     role: UserRole.provider,
     avatarUrl:

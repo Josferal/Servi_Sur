@@ -10,8 +10,8 @@ import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'providers/app_provider.dart';
 import 'providers/cart_provider.dart';
+import 'repositories/firebase_marketplace_repository.dart';
 import 'repositories/marketplace_repository.dart';
-import 'repositories/mock_marketplace_repository.dart';
 import 'routes/app_router.dart';
 
 Future<void> main() async {
@@ -28,8 +28,8 @@ class ServiSurApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<MarketplaceRepository>(
-          create: (_) => MockMarketplaceRepository(),
+        ChangeNotifierProvider<MarketplaceRepository>(
+          create: (_) => FirebaseMarketplaceRepository(),
         ),
         ProxyProvider<MarketplaceRepository, AdminRepository>(
           update: (context, repository, previous) =>

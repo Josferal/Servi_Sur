@@ -1,19 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'address.dart';
 
 enum ServiceRequestStatus {
   draft,
   pending,
   accepted,
-  inProgress,
-  completed,
+  rejected,
   cancelled,
+  convertedToOrder,
 }
 
 class ServiceRequest {
   const ServiceRequest({
     required this.id,
     required this.clientId,
+    this.clientName = '',
+    this.clientEmail = '',
     required this.serviceId,
+    this.serviceTitle = '',
+    this.categoryId = '',
+    this.categoryName = '',
+    this.providerName = '',
     required this.providerId,
     required this.address,
     required this.preferredDate,
@@ -31,8 +39,14 @@ class ServiceRequest {
 
   final String id;
   final String clientId;
+  final String clientName;
+  final String clientEmail;
   final String serviceId;
+  final String serviceTitle;
+  final String categoryId;
+  final String categoryName;
   final String providerId;
+  final String providerName;
   final Address address;
   final DateTime preferredDate;
   final String timeSlot;
@@ -49,8 +63,14 @@ class ServiceRequest {
   ServiceRequest copyWith({
     String? id,
     String? clientId,
+    String? clientName,
+    String? clientEmail,
     String? serviceId,
+    String? serviceTitle,
+    String? categoryId,
+    String? categoryName,
     String? providerId,
+    String? providerName,
     Address? address,
     DateTime? preferredDate,
     String? timeSlot,
@@ -67,8 +87,14 @@ class ServiceRequest {
     return ServiceRequest(
       id: id ?? this.id,
       clientId: clientId ?? this.clientId,
+      clientName: clientName ?? this.clientName,
+      clientEmail: clientEmail ?? this.clientEmail,
       serviceId: serviceId ?? this.serviceId,
+      serviceTitle: serviceTitle ?? this.serviceTitle,
+      categoryId: categoryId ?? this.categoryId,
+      categoryName: categoryName ?? this.categoryName,
       providerId: providerId ?? this.providerId,
+      providerName: providerName ?? this.providerName,
       address: address ?? this.address,
       preferredDate: preferredDate ?? this.preferredDate,
       timeSlot: timeSlot ?? this.timeSlot,
@@ -88,30 +114,45 @@ class ServiceRequest {
     return ServiceRequest(
       id: map['id'] as String? ?? '',
       clientId: map['clientId'] as String? ?? '',
+      clientName: map['clientName'] as String? ?? '',
+      clientEmail: map['clientEmail'] as String? ?? '',
       serviceId: map['serviceId'] as String? ?? '',
+      serviceTitle: map['serviceTitle'] as String? ?? '',
+      categoryId: map['categoryId'] as String? ?? '',
+      categoryName: map['categoryName'] as String? ?? '',
       providerId: map['providerId'] as String? ?? '',
+      providerName: map['providerName'] as String? ?? '',
       address: Address.fromMap(
-        Map<String, dynamic>.from(map['address'] as Map? ?? const {}),
+        Map<String, dynamic>.from(
+          map['address'] as Map? ??
+              {
+                'fullAddress': map['addressText'] as String? ?? '',
+                'label': 'Servicio',
+              },
+        ),
       ),
-      preferredDate:
-          DateTime.tryParse(map['preferredDate'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
-      timeSlot: map['timeSlot'] as String? ?? '',
-      problemDescription: map['problemDescription'] as String? ?? '',
-      estimatedTotal: (map['estimatedTotal'] as num?)?.toDouble() ?? 0,
+      preferredDate: _dateFromValue(
+        map['preferredDate'] ?? map['scheduledDate'],
+      ),
+      timeSlot:
+          map['timeSlot'] as String? ?? map['scheduledTime'] as String? ?? '',
+      problemDescription:
+          map['problemDescription'] as String? ??
+          map['description'] as String? ??
+          '',
+      estimatedTotal:
+          (map['estimatedTotal'] as num?)?.toDouble() ??
+          (map['estimatedPrice'] as num?)?.toDouble() ??
+          0,
       currency: map['currency'] as String? ?? 'USD',
-      status: ServiceRequestStatus.values.byName(
-        map['status'] as String? ?? 'draft',
-      ),
-      createdAt:
-          DateTime.tryParse(map['createdAt'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
+      status: _statusFromValue(map['status']),
+      createdAt: _dateFromValue(map['createdAt']),
       photoUrls: List<String>.from(
         map['photoUrls'] as List<dynamic>? ?? const [],
       ),
       isEmergency: map['isEmergency'] as bool? ?? false,
-      acceptedAt: DateTime.tryParse(map['acceptedAt'] as String? ?? ''),
-      cancelledAt: DateTime.tryParse(map['cancelledAt'] as String? ?? ''),
+      acceptedAt: _nullableDateFromValue(map['acceptedAt']),
+      cancelledAt: _nullableDateFromValue(map['cancelledAt']),
     );
   }
 
@@ -119,13 +160,24 @@ class ServiceRequest {
     return {
       'id': id,
       'clientId': clientId,
+      'clientName': clientName,
+      'clientEmail': clientEmail,
       'serviceId': serviceId,
+      'serviceTitle': serviceTitle,
+      'categoryId': categoryId,
+      'categoryName': categoryName,
       'providerId': providerId,
+      'providerName': providerName,
       'address': address.toMap(),
+      'addressText': address.fullAddress,
       'preferredDate': preferredDate.toIso8601String(),
+      'scheduledDate': preferredDate.toIso8601String(),
       'timeSlot': timeSlot,
+      'scheduledTime': timeSlot,
       'problemDescription': problemDescription,
+      'description': problemDescription,
       'estimatedTotal': estimatedTotal,
+      'estimatedPrice': estimatedTotal,
       'currency': currency,
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
@@ -134,5 +186,29 @@ class ServiceRequest {
       'acceptedAt': acceptedAt?.toIso8601String(),
       'cancelledAt': cancelledAt?.toIso8601String(),
     };
+  }
+
+  static ServiceRequestStatus _statusFromValue(Object? value) {
+    final name = value as String? ?? 'draft';
+    try {
+      return ServiceRequestStatus.values.byName(name);
+    } on ArgumentError {
+      return ServiceRequestStatus.pending;
+    }
+  }
+
+  static DateTime _dateFromValue(Object? value) {
+    return _nullableDateFromValue(value) ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+  }
+
+  static DateTime? _nullableDateFromValue(Object? value) {
+    if (value is Timestamp) {
+      return value.toDate();
+    }
+    if (value is String) {
+      return DateTime.tryParse(value);
+    }
+    return null;
   }
 }

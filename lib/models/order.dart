@@ -1,17 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'address.dart';
 
-enum OrderStatus { active, completed, cancelled }
+enum OrderStatus { pending, accepted, inProgress, active, completed, cancelled }
+
+enum OrderTrackingStatus {
+  requested,
+  assigned,
+  onTheWay,
+  arrived,
+  working,
+  completed,
+}
 
 class Order {
   const Order({
     required this.id,
     required this.requestId,
     required this.clientId,
+    this.clientName = '',
+    this.clientEmail = '',
     required this.providerId,
     required this.serviceId,
     required this.title,
     required this.providerName,
     required this.category,
+    this.categoryId = '',
+    this.description = '',
+    this.scheduledTime = '',
+    this.trackingStatus = OrderTrackingStatus.requested,
     required this.scheduledAt,
     required this.address,
     required this.subtotal,
@@ -27,11 +44,17 @@ class Order {
   final String id;
   final String requestId;
   final String clientId;
+  final String clientName;
+  final String clientEmail;
   final String providerId;
   final String serviceId;
   final String title;
   final String providerName;
   final String category;
+  final String categoryId;
+  final String description;
+  final String scheduledTime;
+  final OrderTrackingStatus trackingStatus;
   final DateTime scheduledAt;
   final Address address;
   final double subtotal;
@@ -55,11 +78,17 @@ class Order {
     String? id,
     String? requestId,
     String? clientId,
+    String? clientName,
+    String? clientEmail,
     String? providerId,
     String? serviceId,
     String? title,
     String? providerName,
     String? category,
+    String? categoryId,
+    String? description,
+    String? scheduledTime,
+    OrderTrackingStatus? trackingStatus,
     DateTime? scheduledAt,
     Address? address,
     double? subtotal,
@@ -75,11 +104,17 @@ class Order {
       id: id ?? this.id,
       requestId: requestId ?? this.requestId,
       clientId: clientId ?? this.clientId,
+      clientName: clientName ?? this.clientName,
+      clientEmail: clientEmail ?? this.clientEmail,
       providerId: providerId ?? this.providerId,
       serviceId: serviceId ?? this.serviceId,
       title: title ?? this.title,
       providerName: providerName ?? this.providerName,
       category: category ?? this.category,
+      categoryId: categoryId ?? this.categoryId,
+      description: description ?? this.description,
+      scheduledTime: scheduledTime ?? this.scheduledTime,
+      trackingStatus: trackingStatus ?? this.trackingStatus,
       scheduledAt: scheduledAt ?? this.scheduledAt,
       address: address ?? this.address,
       subtotal: subtotal ?? this.subtotal,
@@ -98,27 +133,42 @@ class Order {
       id: map['id'] as String? ?? '',
       requestId: map['requestId'] as String? ?? '',
       clientId: map['clientId'] as String? ?? '',
+      clientName: map['clientName'] as String? ?? '',
+      clientEmail: map['clientEmail'] as String? ?? '',
       providerId: map['providerId'] as String? ?? '',
       serviceId: map['serviceId'] as String? ?? '',
-      title: map['title'] as String? ?? '',
+      title: map['title'] as String? ?? map['serviceTitle'] as String? ?? '',
       providerName: map['providerName'] as String? ?? '',
-      category: map['category'] as String? ?? '',
-      scheduledAt:
-          DateTime.tryParse(map['scheduledAt'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
+      category:
+          map['category'] as String? ?? map['categoryName'] as String? ?? '',
+      categoryId: map['categoryId'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      scheduledTime: map['scheduledTime'] as String? ?? '',
+      trackingStatus: _trackingStatusFromValue(map['trackingStatus']),
+      scheduledAt: _dateFromValue(map['scheduledAt'] ?? map['scheduledDate']),
       address: Address.fromMap(
-        Map<String, dynamic>.from(map['address'] as Map? ?? const {}),
+        Map<String, dynamic>.from(
+          map['address'] as Map? ??
+              {
+                'fullAddress': map['addressText'] as String? ?? '',
+                'label': 'Servicio',
+              },
+        ),
       ),
-      subtotal: (map['subtotal'] as num?)?.toDouble() ?? 0,
+      subtotal:
+          (map['subtotal'] as num?)?.toDouble() ??
+          (map['totalAmount'] as num?)?.toDouble() ??
+          0,
       platformFee: (map['platformFee'] as num?)?.toDouble() ?? 0,
-      total: (map['total'] as num?)?.toDouble() ?? 0,
+      total:
+          (map['total'] as num?)?.toDouble() ??
+          (map['totalAmount'] as num?)?.toDouble() ??
+          0,
       currency: map['currency'] as String? ?? 'USD',
-      status: OrderStatus.values.byName(map['status'] as String? ?? 'active'),
-      createdAt:
-          DateTime.tryParse(map['createdAt'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
-      completedAt: DateTime.tryParse(map['completedAt'] as String? ?? ''),
-      cancelledAt: DateTime.tryParse(map['cancelledAt'] as String? ?? ''),
+      status: _statusFromValue(map['status']),
+      createdAt: _dateFromValue(map['createdAt']),
+      completedAt: _nullableDateFromValue(map['completedAt']),
+      cancelledAt: _nullableDateFromValue(map['cancelledAt']),
     );
   }
 
@@ -127,21 +177,65 @@ class Order {
       'id': id,
       'requestId': requestId,
       'clientId': clientId,
+      'clientName': clientName,
+      'clientEmail': clientEmail,
       'providerId': providerId,
       'serviceId': serviceId,
       'title': title,
+      'serviceTitle': title,
       'providerName': providerName,
       'category': category,
+      'categoryId': categoryId,
+      'categoryName': category,
+      'description': description,
+      'scheduledTime': scheduledTime,
+      'trackingStatus': trackingStatus.name,
       'scheduledAt': scheduledAt.toIso8601String(),
+      'scheduledDate': scheduledAt.toIso8601String(),
       'address': address.toMap(),
+      'addressText': address.fullAddress,
       'subtotal': subtotal,
       'platformFee': platformFee,
       'total': total,
+      'totalAmount': total,
       'currency': currency,
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'completedAt': completedAt?.toIso8601String(),
       'cancelledAt': cancelledAt?.toIso8601String(),
     };
+  }
+
+  static OrderStatus _statusFromValue(Object? value) {
+    final name = value as String? ?? 'pending';
+    try {
+      return OrderStatus.values.byName(name);
+    } on ArgumentError {
+      return name == 'accepted' ? OrderStatus.active : OrderStatus.pending;
+    }
+  }
+
+  static OrderTrackingStatus _trackingStatusFromValue(Object? value) {
+    final name = value as String? ?? 'requested';
+    try {
+      return OrderTrackingStatus.values.byName(name);
+    } on ArgumentError {
+      return OrderTrackingStatus.requested;
+    }
+  }
+
+  static DateTime _dateFromValue(Object? value) {
+    return _nullableDateFromValue(value) ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+  }
+
+  static DateTime? _nullableDateFromValue(Object? value) {
+    if (value is Timestamp) {
+      return value.toDate();
+    }
+    if (value is String) {
+      return DateTime.tryParse(value);
+    }
+    return null;
   }
 }

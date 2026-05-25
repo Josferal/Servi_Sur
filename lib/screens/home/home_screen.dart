@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../models/service_category.dart';
 import '../../models/service_item.dart';
+import '../../repositories/firebase_marketplace_repository.dart';
 import '../../repositories/marketplace_repository.dart';
 import '../../services/location_service.dart';
 import '../../widgets/common/app_shell.dart';
@@ -185,6 +186,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final repository = context.watch<MarketplaceRepository>();
+    final firebaseRepository = repository is FirebaseMarketplaceRepository
+        ? repository
+        : null;
     final services = repository.getServices();
     final categories = [...repository.getCategories()]
       ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
@@ -251,6 +255,10 @@ class _HomeScreenState extends State<HomeScreen> {
             textInputAction: TextInputAction.search,
             onChanged: (_) => setState(() {}),
           ),
+          if (firebaseRepository != null) ...[
+            _MarketplaceStatus(repository: firebaseRepository),
+            const SizedBox(height: 18),
+          ],
           const SizedBox(height: 18),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -344,6 +352,67 @@ class _HomeScreenState extends State<HomeScreen> {
       _HomeServiceFilter.distance => 'Distancia',
       _HomeServiceFilter.experience => 'Experiencia',
     };
+  }
+}
+
+class _MarketplaceStatus extends StatelessWidget {
+  const _MarketplaceStatus({required this.repository});
+
+  final FirebaseMarketplaceRepository repository;
+
+  @override
+  Widget build(BuildContext context) {
+    if (repository.isLoading) {
+      return const LinearProgressIndicator(minHeight: 4);
+    }
+
+    final message = repository.errorMessage;
+    if (message != null) {
+      return _StatusMessage(
+        icon: Icons.cloud_off_rounded,
+        text: '$message Mostrando datos temporales.',
+      );
+    }
+
+    if (repository.usingFallback) {
+      return const _StatusMessage(
+        icon: Icons.info_outline_rounded,
+        text: 'Firestore no tiene datos aun. Mostrando datos temporales.',
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+}
+
+class _StatusMessage extends StatelessWidget {
+  const _StatusMessage({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.orangeLight, size: 18),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
