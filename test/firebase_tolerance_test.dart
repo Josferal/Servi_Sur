@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:servi_sur/services/auth_service.dart';
-import 'package:servi_sur/services/user_profile_service.dart';
+import 'package:servi_sur/features/auth/data/datasources/auth_service.dart';
+import 'package:servi_sur/features/profile/data/datasources/user_profile_service.dart';
 
 void main() {
   test('auth service tolerates missing Firebase app in tests', () async {

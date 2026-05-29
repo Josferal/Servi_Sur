@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:servi_sur/main.dart';
-import 'package:servi_sur/routes/app_router.dart';
+import 'package:servi_sur/app/app.dart';
+import 'package:servi_sur/app/router/app_router.dart';
 
 void main() {
   testWidgets('admin route requires authentication', (tester) async {

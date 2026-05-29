@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:servi_sur/models/order.dart';
-import 'package:servi_sur/models/service_request.dart';
+import 'package:servi_sur/shared/domain/entities/order.dart';
+import 'package:servi_sur/shared/domain/entities/service_request.dart';
 
 void main() {
   test('order tolerates incomplete Firestore maps', () {

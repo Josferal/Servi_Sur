@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:servi_sur/firebase_options.dart';
-import 'package:servi_sur/repositories/firebase_marketplace_repository.dart';
+import 'package:servi_sur/core/firebase/firebase_options.dart';
+import 'package:servi_sur/shared/data/repositories/firebase_marketplace_repository.dart';
 
 Future<void> main(List<String> args) async {
   final overwrite = args.contains('--overwrite');

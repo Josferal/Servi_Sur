@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:servi_sur/main.dart';
+import 'package:servi_sur/app/app.dart';
 
 void main() {
   testWidgets('shows login screen', (tester) async {

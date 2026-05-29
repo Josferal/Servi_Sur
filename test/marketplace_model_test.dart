@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:servi_sur/models/service_category.dart';
-import 'package:servi_sur/models/service_item.dart';
-import 'package:servi_sur/repositories/mock_marketplace_repository.dart';
+import 'package:servi_sur/shared/domain/entities/service_category.dart';
+import 'package:servi_sur/shared/domain/entities/service_item.dart';
+import 'package:servi_sur/shared/data/repositories/mock_marketplace_repository.dart';
 
 void main() {
   test('service category tolerates incomplete Firestore maps', () {
