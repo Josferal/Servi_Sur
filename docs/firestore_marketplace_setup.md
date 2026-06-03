@@ -1,6 +1,6 @@
 # Firestore Marketplace Setup
 
-Esta fase conecta categorias y servicios reales con Cloud Firestore. Ordenes, solicitudes, tracking, mapas, Storage, pagos y notificaciones siguen pendientes.
+Esta fase conecta categorias y servicios reales con Cloud Firestore. Ordenes, solicitudes y Storage ya tienen integraciones parciales en sus guias dedicadas; mapas reales, pagos y notificaciones siguen pendientes.
 
 ## Colecciones
 
@@ -93,9 +93,7 @@ Si el entorno local no permite ejecutar el script, copia manualmente la estructu
 
 ## Pendiente
 
-- Ordenes y solicitudes reales en Firestore.
 - Datos reales de proveedores.
-- Storage para imagenes administradas.
 - Tracking/mapas reales.
 - Reglas mas estrictas por estado, rol y ownership.
 - Cloud Functions y custom claims para administracion productiva.

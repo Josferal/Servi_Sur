@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:servi_sur/app/theme/app_colors.dart';
 import 'package:servi_sur/features/auth/data/datasources/auth_service.dart';
 import 'package:servi_sur/features/profile/data/datasources/user_profile_service.dart';
-import 'package:servi_sur/services/account_service.dart';
+import 'package:servi_sur/shared/data/datasources/account_service.dart';
 import 'package:servi_sur/shared/presentation/widgets/common/app_shell.dart';
 
 class ProfileScreen extends StatefulWidget {

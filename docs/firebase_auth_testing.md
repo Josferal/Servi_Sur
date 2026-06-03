@@ -1,6 +1,6 @@
 # Pruebas manuales de Firebase Auth y roles
 
-Esta guia valida la Fase 1.5: autenticacion real, perfil base en Firestore, guards de rutas y acceso por rol. Los servicios, ordenes, mapas, Storage y notificaciones siguen fuera de alcance por ahora.
+Esta guia valida autenticacion real, perfil base en Firestore, guards de rutas y acceso por rol. Servicios, ordenes y Storage ya tienen integraciones parciales; mapas reales, pagos y notificaciones siguen fuera de alcance por ahora.
 
 ## Preparacion
 

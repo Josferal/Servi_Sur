@@ -1,6 +1,6 @@
 # Firestore Orders Setup
 
-Esta fase conecta solicitudes y ordenes reales con Cloud Firestore. Mapas reales, Storage, notificaciones, pagos, Cloud Functions y custom claims siguen pendientes.
+Esta fase conecta solicitudes y ordenes reales con Cloud Firestore. Storage para adjuntos ya existe; mapas reales, notificaciones, pagos, Cloud Functions y custom claims siguen pendientes.
 
 ## Colecciones
 
@@ -51,6 +51,9 @@ Campos esperados:
 - `totalAmount`
 - `status`
 - `trackingStatus`
+- `imageUrls`
+- `imagePaths`
+- `attachments`
 - `createdAt`
 - `updatedAt`
 
@@ -123,7 +126,7 @@ Estados de tracking: `requested`, `assigned`, `onTheWay`, `arrived`, `working`, 
 ## Limitaciones
 
 - El mapa sigue siendo visual temporal.
-- No se suben fotos; Storage queda pendiente.
+- Las fotos se suben a Firebase Storage y en Firestore solo se guardan URLs, paths y metadata.
 - No hay notificaciones push.
 - No hay pagos reales.
 - No hay asignacion automatica avanzada de proveedor.

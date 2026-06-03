@@ -68,7 +68,7 @@ Administrador:
 
 ## Implementacion Flutter
 
-- `lib/services/account_service.dart` centraliza lectura/listado/actualizacion de usuarios, cambio de contrasena y auditoria.
+- `lib/shared/data/datasources/account_service.dart` centraliza lectura/listado/actualizacion de usuarios, cambio de contrasena y auditoria.
 - `lib/features/admin/data/repositories/firebase_admin_repository.dart` implementa `AdminRepository` usando `users/{uid}` para cuentas reales.
 - `MockAdminRepository` sigue disponible para fallback y pruebas.
 - `lib/admin/repositories/firebase_admin_repository.dart` exporta el repositorio real para compatibilidad con la ruta solicitada.
@@ -114,7 +114,7 @@ Estado actual: no existe carpeta `functions/`, asi que esta fase deja el flujo p
 
 ## Limitaciones Actuales
 
-- La creacion basica desde admin usa Firebase Auth del cliente; en produccion debe moverse a Cloud Functions para no cambiar la sesion del administrador.
+- La creacion basica desde admin no se ejecuta en Flutter; debe moverse a Cloud Functions para no cambiar la sesion del administrador.
 - El bloqueo actual cambia `users/{uid}.status`; deshabilitar Firebase Auth requiere Admin SDK.
 - Eliminacion real de Auth no esta implementada en Flutter por seguridad.
 - Avatar queda limitado a guardar `avatarUrl`; subida/seleccion de archivo queda pendiente aunque `firebase_storage` existe en dependencias.

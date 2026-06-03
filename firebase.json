@@ -15,7 +15,7 @@
         }
       },
       "dart": {
-        "lib/firebase_options.dart": {
+        "lib/core/firebase/firebase_options.dart": {
           "projectId": "servi-sur-dashboard",
           "configurations": {
             "android": "1:444698868088:android:2d119a59da3e8d0970b08d",

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:servi_sur/features/admin/data/repositories/mock_admin_repository.dart';
-import 'package:servi_sur/services/account_service.dart';
+import 'package:servi_sur/shared/data/datasources/account_service.dart';
 import 'package:servi_sur/shared/data/repositories/mock_marketplace_repository.dart';
 import 'package:servi_sur/shared/domain/entities/user_model.dart';
 

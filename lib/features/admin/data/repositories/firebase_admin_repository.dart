@@ -8,7 +8,7 @@ import 'package:servi_sur/features/admin/domain/entities/admin_report_point.dart
 import 'package:servi_sur/features/admin/domain/entities/admin_role_config.dart';
 import 'package:servi_sur/features/admin/domain/entities/admin_settings.dart';
 import 'package:servi_sur/features/admin/domain/repositories/admin_repository.dart';
-import 'package:servi_sur/services/account_service.dart';
+import 'package:servi_sur/shared/data/datasources/account_service.dart';
 import 'package:servi_sur/shared/domain/entities/service_category.dart';
 import 'package:servi_sur/shared/domain/entities/service_item.dart';
 import 'package:servi_sur/shared/domain/entities/user_model.dart';
